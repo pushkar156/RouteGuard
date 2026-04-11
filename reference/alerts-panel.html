@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RouteGuard | Alerts Panel</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary": "#472a00",
+                    "surface-container-highest": "#2a3548",
+                    "surface": "#071325",
+                    "primary-fixed-dim": "#3adfab",
+                    "tertiary-fixed-dim": "#ffb95f",
+                    "on-surface": "#d7e3fc",
+                    "surface-container-high": "#1f2a3d",
+                    "secondary-fixed-dim": "#adc8f5",
+                    "secondary-container": "#2f4a70",
+                    "secondary-fixed": "#d5e3ff",
+                    "background": "#071325",
+                    "tertiary-container": "#f49d09",
+                    "on-error": "#690005",
+                    "on-background": "#d7e3fc",
+                    "on-tertiary-fixed-variant": "#653e00",
+                    "secondary": "#adc8f5",
+                    "tertiary": "#ffc071",
+                    "on-secondary-fixed": "#001c3b",
+                    "inverse-on-surface": "#253144",
+                    "on-error-container": "#ffdad6",
+                    "error-container": "#93000a",
+                    "on-primary-fixed": "#002116",
+                    "error": "#ffb4ab",
+                    "on-primary": "#003828",
+                    "on-tertiary-container": "#603b00",
+                    "on-primary-fixed-variant": "#00513b",
+                    "surface-container-lowest": "#030e20",
+                    "on-surface-variant": "#bbcac1",
+                    "tertiary-fixed": "#ffddb8",
+                    "surface-container": "#142032",
+                    "surface-dim": "#071325",
+                    "surface-bright": "#2e394d",
+                    "on-primary-container": "#004d38",
+                    "on-secondary-container": "#9fbae6",
+                    "primary-container": "#00c896",
+                    "surface-tint": "#3adfab",
+                    "on-tertiary-fixed": "#2a1700",
+                    "inverse-primary": "#006c4f",
+                    "inverse-surface": "#d7e3fc",
+                    "surface-variant": "#2a3548",
+                    "surface-container-low": "#101c2e",
+                    "on-secondary-fixed-variant": "#2d486d",
+                    "on-secondary": "#133155",
+                    "primary-fixed": "#60fcc6",
+                    "outline-variant": "#3c4a43",
+                    "outline": "#85948c",
+                    "primary": "#42e5b0"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "fontFamily": {
+                    "headline": ["Inter"],
+                    "body": ["Inter"],
+                    "label": ["Inter"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(31, 42, 61, 0.7);
+            backdrop-filter: blur(20px);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface selection:bg-primary selection:text-on-primary">
+<!-- SideNavBar Anchor -->
+<aside class="fixed left-0 top-0 h-full w-[240px] flex flex-col bg-[#071325] no-border tonal-layering bg-[#030e20] z-50">
+<div class="p-6">
+<span class="text-xl font-black tracking-tighter text-[#42e5b0]">RouteGuard</span>
+<p class="text-[10px] uppercase tracking-[0.1em] text-[#adc8f5] mt-1">Vigilant Sentinel</p>
+</div>
+<nav class="flex-1 mt-4">
+<a class="px-4 py-3 flex items-center gap-3 text-[#adc8f5] hover:text-[#42e5b0] hover:bg-[#1f2a3d] transition-all duration-200 font-['Inter'] font-medium text-sm tracking-tight" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+                Dashboard
+            </a>
+<a class="px-4 py-3 flex items-center gap-3 text-[#adc8f5] hover:text-[#42e5b0] hover:bg-[#1f2a3d] transition-all duration-200 font-['Inter'] font-medium text-sm tracking-tight" href="#">
+<span class="material-symbols-outlined">map</span>
+                Map
+            </a>
+<a class="px-4 py-3 flex items-center gap-3 text-[#adc8f5] hover:text-[#42e5b0] hover:bg-[#1f2a3d] transition-all duration-200 font-['Inter'] font-medium text-sm tracking-tight" href="#">
+<span class="material-symbols-outlined">precision_manufacturing</span>
+                Simulator
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-[#42e5b0] border-l-4 border-[#42e5b0] bg-[#101c2e] font-bold font-['Inter'] text-sm tracking-tight active:scale-[0.98] transition-colors" href="#">
+<span class="material-symbols-outlined">notifications_active</span>
+                Alerts
+            </a>
+</nav>
+<div class="mt-auto p-4 border-t border-outline-variant/10">
+<div class="px-4 py-3 flex items-center gap-3 text-[#adc8f5] hover:text-[#42e5b0] hover:bg-[#1f2a3d] transition-all duration-200 font-['Inter'] font-medium text-sm tracking-tight">
+<span class="material-symbols-outlined">sensors</span>
+                Pipeline Status
+            </div>
+</div>
+</aside>
+<!-- Main Canvas -->
+<main class="ml-[240px] min-h-screen">
+<!-- TopAppBar Anchor -->
+<header class="w-full h-24 flex flex-col justify-center px-8 mb-8">
+<div class="flex items-center justify-between">
+<div>
+<h1 class="text-2xl font-bold tracking-tight text-[#d7e3fc]">Alerts Panel</h1>
+<p class="text-sm text-[#adc8f5]">5 alerts triggered · 2 unresolved</p>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="bg-surface-container-lowest border-none rounded-lg py-2 pl-10 pr-4 text-sm w-64 focus:ring-2 focus:ring-[#42e5b0] transition-all" placeholder="Search alerts..." type="text"/>
+</div>
+<div class="flex items-center gap-4 text-[#adc8f5]">
+<span class="material-symbols-outlined cursor-pointer hover:text-[#42e5b0] transition-colors">account_circle</span>
+<span class="material-symbols-outlined cursor-pointer hover:text-[#42e5b0] transition-colors">settings</span>
+</div>
+</div>
+</div>
+</header>
+<!-- Content Area -->
+<div class="px-8 pb-12 max-w-6xl">
+<!-- Stat Chips -->
+<div class="flex gap-4 mb-10">
+<div class="flex items-center gap-2 px-4 py-2 rounded-full bg-error-container text-on-error-container font-medium text-sm">
+<span class="w-2 h-2 rounded-full bg-error"></span>
+                    2 Active
+                </div>
+<div class="flex items-center gap-2 px-4 py-2 rounded-full bg-surface-container-high text-secondary font-medium text-sm">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+                    3 Resolved
+                </div>
+</div>
+<!-- Alerts Timeline List -->
+<div class="space-y-6 relative before:absolute before:left-[19px] before:top-2 before:bottom-2 before:w-[2px] before:bg-outline-variant/20">
+<!-- Alert Card 1: Active -->
+<div class="relative pl-12">
+<div class="absolute left-0 top-6 w-10 h-10 rounded-full bg-error-container flex items-center justify-center z-10 border-4 border-surface shadow-lg">
+<span class="material-symbols-outlined text-on-error-container text-xl" style="font-variation-settings: 'FILL' 1;">warning</span>
+</div>
+<div class="bg-surface-container-low rounded-lg p-6 border-l-4 border-error hover:bg-surface-container-high transition-colors duration-200">
+<div class="flex justify-between items-start">
+<div>
+<div class="flex items-center gap-3 mb-2">
+<span class="text-[10px] font-bold tracking-[0.05em] uppercase text-on-surface-variant">SHP-004</span>
+<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-error-container text-on-error-container uppercase">Critical</span>
+</div>
+<h3 class="text-lg font-bold text-on-surface mb-1">Route Deviation Detected</h3>
+<p class="text-sm text-on-surface-variant">Carrier diverted from optimized path into high-risk zone (Zone B-14).</p>
+</div>
+<div class="text-right">
+<div class="text-2xl font-black tracking-tight text-on-surface">94<span class="text-sm font-normal text-on-surface-variant ml-1">RISK</span></div>
+<div class="text-[10px] text-outline font-medium uppercase mt-1">2 mins ago</div>
+</div>
+</div>
+<div class="mt-6 flex justify-end">
+<button class="px-4 py-2 bg-gradient-to-br from-primary to-primary-container text-on-primary text-xs font-bold rounded-lg shadow-lg hover:brightness-110 active:scale-95 transition-all">
+                                Mark Resolved
+                            </button>
+</div>
+</div>
+</div>
+<!-- Alert Card 2: Active -->
+<div class="relative pl-12">
+<div class="absolute left-0 top-6 w-10 h-10 rounded-full bg-error-container flex items-center justify-center z-10 border-4 border-surface shadow-lg">
+<span class="material-symbols-outlined text-on-error-container text-xl" style="font-variation-settings: 'FILL' 1;">sensors_off</span>
+</div>
+<div class="bg-surface-container-low rounded-lg p-6 border-l-4 border-error hover:bg-surface-container-high transition-colors duration-200">
+<div class="flex justify-between items-start">
+<div>
+<div class="flex items-center gap-3 mb-2">
+<span class="text-[10px] font-bold tracking-[0.05em] uppercase text-on-surface-variant">SHP-007</span>
+<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-error-container text-on-error-container uppercase">Urgent</span>
+</div>
+<h3 class="text-lg font-bold text-on-surface mb-1">IoT Telemetry Failure</h3>
+<p class="text-sm text-on-surface-variant">Signal lost for reefer temperature control unit in transit.</p>
+</div>
+<div class="text-right">
+<div class="text-2xl font-black tracking-tight text-on-surface">88<span class="text-sm font-normal text-on-surface-variant ml-1">RISK</span></div>
+<div class="text-[10px] text-outline font-medium uppercase mt-1">14 mins ago</div>
+</div>
+</div>
+<div class="mt-6 flex justify-end">
+<button class="px-4 py-2 bg-gradient-to-br from-primary to-primary-container text-on-primary text-xs font-bold rounded-lg shadow-lg hover:brightness-110 active:scale-95 transition-all">
+                                Mark Resolved
+                            </button>
+</div>
+</div>
+</div>
+<!-- Alert Card 3: Resolved -->
+<div class="relative pl-12">
+<div class="absolute left-0 top-6 w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center z-10 border-4 border-surface shadow-lg">
+<span class="material-symbols-outlined text-secondary text-xl">check_circle</span>
+</div>
+<div class="bg-surface-container-lowest/50 rounded-lg p-6 border-l-4 border-outline-variant hover:bg-surface-container-low transition-colors duration-200">
+<div class="flex justify-between items-start opacity-70">
+<div>
+<div class="flex items-center gap-3 mb-2">
+<span class="text-[10px] font-bold tracking-[0.05em] uppercase text-on-surface-variant">SHP-001</span>
+<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-surface-container-highest text-secondary uppercase">Resolved</span>
+</div>
+<h3 class="text-lg font-bold text-on-surface mb-1">Fuel Efficiency Drop</h3>
+<p class="text-sm text-on-surface-variant">Unexpected fuel consumption increase detected in Vehicle A-12.</p>
+</div>
+<div class="text-right">
+<div class="text-2xl font-black tracking-tight text-on-surface">42<span class="text-sm font-normal text-on-surface-variant ml-1">RISK</span></div>
+<div class="text-[10px] text-outline font-medium uppercase mt-1">2 hours ago</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Alert Card 4: Resolved -->
+<div class="relative pl-12">
+<div class="absolute left-0 top-6 w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center z-10 border-4 border-surface shadow-lg">
+<span class="material-symbols-outlined text-secondary text-xl">check_circle</span>
+</div>
+<div class="bg-surface-container-lowest/50 rounded-lg p-6 border-l-4 border-outline-variant hover:bg-surface-container-low transition-colors duration-200">
+<div class="flex justify-between items-start opacity-70">
+<div>
+<div class="flex items-center gap-3 mb-2">
+<span class="text-[10px] font-bold tracking-[0.05em] uppercase text-on-surface-variant">SHP-002</span>
+<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-surface-container-highest text-secondary uppercase">Resolved</span>
+</div>
+<h3 class="text-lg font-bold text-on-surface mb-1">Geofence Entry Delay</h3>
+<p class="text-sm text-on-surface-variant">Shipment delayed at Port Newark customs clearance terminal.</p>
+</div>
+<div class="text-right">
+<div class="text-2xl font-black tracking-tight text-on-surface">15<span class="text-sm font-normal text-on-surface-variant ml-1">RISK</span></div>
+<div class="text-[10px] text-outline font-medium uppercase mt-1">4 hours ago</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Alert Card 5: Resolved -->
+<div class="relative pl-12">
+<div class="absolute left-0 top-6 w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center z-10 border-4 border-surface shadow-lg">
+<span class="material-symbols-outlined text-secondary text-xl">check_circle</span>
+</div>
+<div class="bg-surface-container-lowest/50 rounded-lg p-6 border-l-4 border-outline-variant hover:bg-surface-container-low transition-colors duration-200">
+<div class="flex justify-between items-start opacity-70">
+<div>
+<div class="flex items-center gap-3 mb-2">
+<span class="text-[10px] font-bold tracking-[0.05em] uppercase text-on-surface-variant">SHP-005</span>
+<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-surface-container-highest text-secondary uppercase">Resolved</span>
+</div>
+<h3 class="text-lg font-bold text-on-surface mb-1">Manual Override</h3>
+<p class="text-sm text-on-surface-variant">Unscheduled door opening event recorded in transit area.</p>
+</div>
+<div class="text-right">
+<div class="text-2xl font-black tracking-tight text-on-surface">30<span class="text-sm font-normal text-on-surface-variant ml-1">RISK</span></div>
+<div class="text-[10px] text-outline font-medium uppercase mt-1">Yesterday</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Background Aesthetic Ornamentation -->
+<div class="fixed bottom-0 right-0 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[120px] -z-10 pointer-events-none"></div>
+<div class="fixed top-0 right-0 w-full h-full -z-20 opacity-20 pointer-events-none">
+<div class="absolute inset-0" style="background-image: radial-gradient(#1f2a3d 1px, transparent 1px); background-size: 40px 40px;"></div>
+</div>
+</main>
+</body></html>
