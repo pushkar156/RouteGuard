@@ -1,0 +1,136 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-surface: #f4f7f5;
+    --color-surface-dim: #dee3e0;
+    --color-surface-bright: #ffffff;
+    --color-surface-container-lowest: #ffffff;
+    --color-surface-container-low: #f4f7f5;
+    --color-surface-container: #ebeee9;
+    --color-surface-container-high: #e1e6e0;
+    --color-surface-container-highest: #d7dcd8;
+    --color-primary: #336b4f;
+    --color-on-primary: #ffffff;
+    --color-primary-container: #bce6d1;
+    --color-on-primary-container: #0e2b1d;
+    --color-secondary: #a37c3f;
+    --color-on-secondary: #ffffff;
+    --color-secondary-container: #fce1ba;
+    --color-on-secondary-container: #2b1e07;
+    --color-tertiary: #8f5c61;
+    --color-on-tertiary: #ffffff;
+    --color-tertiary-container: #fadddf;
+    --color-on-tertiary-container: #2b1113;
+    --color-error: #ba1a1a;
+    --color-on-error: #ffffff;
+    --color-error-container: #ffdad6;
+    --color-on-error-container: #410002;
+    --color-background: #f4f7f5;
+    --color-on-background: #1d211f;
+    --color-on-surface: #1d211f;
+    --color-surface-variant: #dce5df;
+    --color-on-surface-variant: #3c4540;
+    --color-outline: #6d7b73;
+    --color-outline-variant: #dce5df;
+    --color-inverse-surface: #2d312f;
+    --color-inverse-on-surface: #eef2ef;
+    --color-inverse-primary: #82b09a;
+    --color-primary-fixed: #c7f5dd;
+    --color-primary-fixed-dim: #a2d4be;
+    --color-on-primary-fixed: #0e2b1d;
+    --color-on-primary-fixed-variant: #1c4a33;
+    --color-secondary-fixed: #ffedcf;
+    --color-secondary-fixed-dim: #e3c99f;
+    --color-on-secondary-fixed: #2b1e07;
+    --color-on-secondary-fixed-variant: #4a350f;
+    --color-tertiary-fixed: #fce1e3;
+    --color-tertiary-fixed-dim: #ddc0c2;
+    --color-on-tertiary-fixed: #2b1113;
+    --color-on-tertiary-fixed-variant: #4a2327;
+  }
+
+  .dark {
+    --color-surface: #1d211f;
+    --color-surface-dim: #141716;
+    --color-surface-bright: #2e3330;
+    --color-surface-container-lowest: #0d100e;
+    --color-surface-container-low: #141716;
+    --color-surface-container: #1d211f;
+    --color-surface-container-high: #272c29;
+    --color-surface-container-highest: #313834;
+    --color-primary: #82b09a;
+    --color-on-primary: #0f261a;
+    --color-primary-container: #214a36;
+    --color-on-primary-container: #bce6d1;
+    --color-secondary: #cca776;
+    --color-on-secondary: #2b1a06;
+    --color-secondary-container: #4a3111;
+    --color-on-secondary-container: #fce1ba;
+    --color-tertiary: #b89093;
+    --color-on-tertiary: #2e1215;
+    --color-tertiary-container: #4a2125;
+    --color-on-tertiary-container: #fadddf;
+    --color-error: #d48c8c;
+    --color-on-error: #331212;
+    --color-error-container: #592121;
+    --color-on-error-container: #fceaea;
+    --color-background: #1d211f;
+    --color-on-background: #e3e8e5;
+    --color-on-surface: #e3e8e5;
+    --color-surface-variant: #3c4540;
+    --color-on-surface-variant: #bac7c0;
+    --color-outline: #8b9c93;
+    --color-outline-variant: #3c4540;
+    --color-inverse-surface: #e3e8e5;
+    --color-inverse-on-surface: #1d211f;
+    --color-inverse-primary: #336b4f;
+    --color-primary-fixed: #c7f5dd;
+    --color-primary-fixed-dim: #a2d4be;
+    --color-on-primary-fixed: #0e2b1d;
+    --color-on-primary-fixed-variant: #1c4a33;
+    --color-secondary-fixed: #ffedcf;
+    --color-secondary-fixed-dim: #e3c99f;
+    --color-on-secondary-fixed: #2b1e07;
+    --color-on-secondary-fixed-variant: #4a350f;
+    --color-tertiary-fixed: #fce1e3;
+    --color-tertiary-fixed-dim: #ddc0c2;
+    --color-on-tertiary-fixed: #2b1113;
+    --color-on-tertiary-fixed-variant: #4a2327;
+  }
+}
+
+.dark .leaflet-layer,
+.dark .leaflet-control-zoom-in,
+.dark .leaflet-control-zoom-out,
+.dark .leaflet-control-attribution {
+  filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
+}
+
+@layer base {
+  body {
+    @apply bg-surface text-on-surface font-body;
+  }
+}
+
+@layer utilities {
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  }
+  
+  ::-webkit-scrollbar {
+    width: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: theme('colors.surface-container-lowest');
+  }
+  ::-webkit-scrollbar-thumb {
+    background: theme('colors.surface-container-high');
+    border-radius: 10px;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: theme('colors.primary');
+  }
+}

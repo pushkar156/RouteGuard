@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RouteGuard | What-If Simulator</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary": "#472a00",
+                        "surface-container-highest": "#2a3548",
+                        "surface": "#071325",
+                        "primary-fixed-dim": "#3adfab",
+                        "tertiary-fixed-dim": "#ffb95f",
+                        "on-surface": "#d7e3fc",
+                        "surface-container-high": "#1f2a3d",
+                        "secondary-fixed-dim": "#adc8f5",
+                        "secondary-container": "#2f4a70",
+                        "secondary-fixed": "#d5e3ff",
+                        "background": "#071325",
+                        "tertiary-container": "#f49d09",
+                        "on-error": "#690005",
+                        "on-background": "#d7e3fc",
+                        "on-tertiary-fixed-variant": "#653e00",
+                        "secondary": "#adc8f5",
+                        "tertiary": "#ffc071",
+                        "on-secondary-fixed": "#001c3b",
+                        "inverse-on-surface": "#253144",
+                        "on-error-container": "#ffdad6",
+                        "error-container": "#93000a",
+                        "on-primary-fixed": "#002116",
+                        "error": "#ffb4ab",
+                        "on-primary": "#003828",
+                        "on-tertiary-container": "#603b00",
+                        "on-primary-fixed-variant": "#00513b",
+                        "surface-container-lowest": "#030e20",
+                        "on-surface-variant": "#bbcac1",
+                        "tertiary-fixed": "#ffddb8",
+                        "surface-container": "#142032",
+                        "surface-dim": "#071325",
+                        "surface-bright": "#2e394d",
+                        "on-primary-container": "#004d38",
+                        "on-secondary-container": "#9fbae6",
+                        "primary-container": "#00c896",
+                        "surface-tint": "#3adfab",
+                        "on-tertiary-fixed": "#2a1700",
+                        "inverse-primary": "#006c4f",
+                        "inverse-surface": "#d7e3fc",
+                        "surface-variant": "#2a3548",
+                        "surface-container-low": "#101c2e",
+                        "on-secondary-fixed-variant": "#2d486d",
+                        "on-secondary": "#133155",
+                        "primary-fixed": "#60fcc6",
+                        "outline-variant": "#3c4a43",
+                        "outline": "#85948c",
+                        "primary": "#42e5b0"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Inter"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #071325; }
+        ::-webkit-scrollbar-thumb { background: #1f2a3d; border-radius: 10px; }
+        .glass-panel {
+            background: rgba(31, 42, 61, 0.7);
+            backdrop-filter: blur(20px);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body selection:bg-primary selection:text-on-primary">
+<aside class="fixed left-0 top-0 h-full w-[240px] flex flex-col bg-[#071325] no-border tonal-layering bg-[#030e20] z-50">
+<div class="px-6 py-8">
+<h1 class="text-xl font-black tracking-tighter text-[#42e5b0]">RouteGuard</h1>
+<p class="text-[10px] uppercase tracking-widest text-secondary opacity-60 mt-1">Vigilant Sentinel</p>
+</div>
+<nav class="flex-1 px-2 space-y-1">
+<a class="px-4 py-3 flex items-center gap-3 text-[#adc8f5] hover:text-[#42e5b0] font-['Inter'] font-medium text-sm tracking-tight hover:bg-[#1f2a3d] transition-all duration-200" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+                Dashboard
+            </a>
+<a class="px-4 py-3 flex items-center gap-3 text-[#adc8f5] hover:text-[#42e5b0] font-['Inter'] font-medium text-sm tracking-tight hover:bg-[#1f2a3d] transition-all duration-200" href="#">
+<span class="material-symbols-outlined">map</span>
+                Map
+            </a>
+<!-- Active Tab: Simulator -->
+<a class="px-4 py-3 flex items-center gap-3 text-[#42e5b0] border-l-4 border-[#42e5b0] bg-[#101c2e] font-bold font-['Inter'] text-sm tracking-tight transition-all duration-200" href="#">
+<span class="material-symbols-outlined">precision_manufacturing</span>
+                Simulator
+            </a>
+<a class="px-4 py-3 flex items-center gap-3 text-[#adc8f5] hover:text-[#42e5b0] font-['Inter'] font-medium text-sm tracking-tight hover:bg-[#1f2a3d] transition-all duration-200" href="#">
+<span class="material-symbols-outlined">notifications_active</span>
+                Alerts
+            </a>
+</nav>
+<div class="p-4 mt-auto border-t border-outline-variant/10">
+<div class="px-4 py-3 flex items-center gap-3 text-[#adc8f5] hover:text-[#42e5b0] font-['Inter'] font-medium text-sm tracking-tight hover:bg-[#1f2a3d] transition-all duration-200 rounded-lg cursor-pointer">
+<span class="material-symbols-outlined">sensors</span>
+                Pipeline Status
+            </div>
+</div>
+</aside>
+<main class="ml-[240px] min-h-screen flex flex-col">
+<!-- TopAppBar -->
+<header class="w-full h-24 flex flex-col justify-center px-8 no-border space-y-2 mb-8">
+<div class="flex items-center justify-between">
+<div>
+<h2 class="text-2xl font-bold tracking-tight text-[#d7e3fc]">What-If Simulator</h2>
+<p class="text-sm text-[#adc8f5]">Trigger a hypothetical disruption and watch scores update</p>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-4 bg-surface-container-lowest px-4 py-2 rounded-lg border border-outline-variant/20 focus-within:ring-2 focus-within:ring-[#42e5b0] transition-all">
+<span class="material-symbols-outlined text-secondary text-lg">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-sm text-on-surface placeholder:text-on-surface-variant w-48" placeholder="Search parameters..." type="text"/>
+</div>
+<div class="flex items-center gap-2">
+<button class="p-2 hover:bg-surface-container-high rounded-full transition-colors group">
+<span class="material-symbols-outlined text-[#adc8f5] group-hover:text-[#42e5b0]">settings</span>
+</button>
+<button class="p-2 hover:bg-surface-container-high rounded-full transition-colors group">
+<span class="material-symbols-outlined text-[#adc8f5] group-hover:text-[#42e5b0]">account_circle</span>
+</button>
+</div>
+</div>
+</div>
+</header>
+<div class="px-8 pb-12 flex gap-8">
+<!-- Left Panel (40%) -->
+<section class="w-[40%] space-y-6">
+<div class="bg-surface-container-low p-8 rounded-lg shadow-sm">
+<div class="flex items-center justify-between mb-8">
+<h3 class="text-xs font-bold uppercase tracking-[0.1em] text-on-surface-variant">Simulation Parameters</h3>
+<span class="flex items-center gap-1.5 px-3 py-1 bg-primary/10 text-primary rounded-full text-[10px] font-bold tracking-wide">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+                            SIMULATION ACTIVE
+                        </span>
+</div>
+<div class="space-y-8">
+<div class="space-y-2">
+<label class="text-[11px] font-bold text-on-surface-variant uppercase tracking-wider">Target Port</label>
+<div class="relative group">
+<select class="w-full bg-surface-container-lowest border-none rounded-lg text-on-surface text-sm p-4 appearance-none focus:ring-2 focus:ring-primary transition-all">
+<option>Rotterdam, Netherlands</option>
+<option>Shanghai, China</option>
+<option>Singapore, SG</option>
+<option>Los Angeles, USA</option>
+</select>
+<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant">expand_more</span>
+</div>
+</div>
+<div class="space-y-2">
+<label class="text-[11px] font-bold text-on-surface-variant uppercase tracking-wider">Disruption Type</label>
+<div class="relative group">
+<select class="w-full bg-surface-container-lowest border-none rounded-lg text-on-surface text-sm p-4 appearance-none focus:ring-2 focus:ring-primary transition-all">
+<option>Labor Strike</option>
+<option>Extreme Weather (Typhoon)</option>
+<option>Cybersecurity Breach</option>
+<option>Port Congestion</option>
+</select>
+<span class="material-symbols-outlined absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant">expand_more</span>
+</div>
+</div>
+<div class="space-y-6">
+<div class="flex justify-between items-end">
+<label class="text-[11px] font-bold text-on-surface-variant uppercase tracking-wider">Disruption Severity</label>
+<span class="text-2xl font-bold text-primary">Level 4</span>
+</div>
+<input class="w-full h-1.5 bg-surface-container-highest rounded-lg appearance-none cursor-pointer accent-primary" max="5" min="1" type="range" value="4"/>
+<div class="flex justify-between text-[10px] font-medium text-on-surface-variant uppercase tracking-tighter">
+<span>Negligible</span>
+<span>Critical</span>
+</div>
+</div>
+<div class="pt-6 space-y-4">
+<button class="w-full py-4 rounded-lg bg-gradient-to-br from-primary to-primary-container text-on-primary font-bold text-sm tracking-tight shadow-lg shadow-primary/10 hover:opacity-90 active:scale-[0.98] transition-all">
+                                Trigger Disruption
+                            </button>
+<button class="w-full py-4 rounded-lg text-secondary text-sm font-semibold hover:bg-surface-container-high transition-colors">
+                                Reset Simulation
+                            </button>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-low p-6 rounded-lg overflow-hidden relative group">
+<img class="absolute inset-0 w-full h-full object-cover opacity-20 group-hover:scale-105 transition-transform duration-700" data-alt="dramatic aerial view of a massive container port at dusk with glowing industrial lights and deep teal ocean waters" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCezk7nWipBSgTY7ZnZKLuWbbTbnvc5x3nv9--OLYEEd1uDTP0k0ds0c5zLpHGs72UgIa445MVo1AHmedMyfeAoXRUgd5hVqTGpfhYiHCpup6BxgM33SFCYRqmxBfgkvuKu5kB6hs7-0QYSwNoDkISlSfNvhHBxWST5tbnTeG81whaS6wFNIVRV2-k583TZ0HGOpSggb6bl0jIZonXgyxKW66DAh3sLD7b6VyGGm7UflbtnnX7aj5q9oCuaewvpjigw9yKUk_i9ThQ"/>
+<div class="relative z-10">
+<p class="text-[11px] font-bold text-primary uppercase tracking-widest mb-1">Impact Insight</p>
+<p class="text-sm text-on-surface leading-relaxed">Level 4 severity at Rotterdam typically increases EU-bound logistics costs by <span class="text-primary font-bold">18.4%</span> over a 72-hour period.</p>
+</div>
+</div>
+</section>
+<!-- Right Panel (60%) -->
+<section class="w-[60%] space-y-6">
+<div class="bg-surface-container-low rounded-lg p-1">
+<div class="p-6 pb-2">
+<h3 class="text-xs font-bold uppercase tracking-[0.1em] text-on-surface-variant mb-6">Simulated Shipment Impact</h3>
+</div>
+<table class="w-full text-left">
+<thead>
+<tr class="text-[10px] uppercase tracking-widest text-on-surface-variant/60">
+<th class="px-6 py-4 font-bold">Shipment ID</th>
+<th class="px-6 py-4 font-bold">Origin</th>
+<th class="px-6 py-4 font-bold text-center">Base Score</th>
+<th class="px-6 py-4 font-bold text-center">Simulated</th>
+<th class="px-6 py-4 font-bold text-right">Delta</th>
+</tr>
+</thead>
+<tbody class="text-sm divide-y divide-outline-variant/5">
+<tr class="hover:bg-surface-container-high transition-colors group">
+<td class="px-6 py-5">
+<div class="flex flex-col">
+<span class="font-bold text-on-surface">RG-9921-X</span>
+<span class="text-xs text-on-surface-variant">Electronics Bulk</span>
+</div>
+</td>
+<td class="px-6 py-5 text-on-surface-variant">Busan, KR</td>
+<td class="px-6 py-5 text-center font-medium">12</td>
+<td class="px-6 py-5 text-center font-bold text-error">78</td>
+<td class="px-6 py-5 text-right">
+<span class="px-2.5 py-1 bg-error-container text-on-error-container rounded-md text-[11px] font-black">
+                                        +550%
+                                    </span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-high transition-colors group">
+<td class="px-6 py-5">
+<div class="flex flex-col">
+<span class="font-bold text-on-surface">RG-4402-Q</span>
+<span class="text-xs text-on-surface-variant">Pharma Cold Chain</span>
+</div>
+</td>
+<td class="px-6 py-5 text-on-surface-variant">Singapore, SG</td>
+<td class="px-6 py-5 text-center font-medium">08</td>
+<td class="px-6 py-5 text-center font-bold text-error">92</td>
+<td class="px-6 py-5 text-right">
+<span class="px-2.5 py-1 bg-error-container text-on-error-container rounded-md text-[11px] font-black">
+                                        +1050%
+                                    </span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-high transition-colors group">
+<td class="px-6 py-5">
+<div class="flex flex-col">
+<span class="font-bold text-on-surface">RG-1185-L</span>
+<span class="text-xs text-on-surface-variant">Automotive Parts</span>
+</div>
+</td>
+<td class="px-6 py-5 text-on-surface-variant">Yokohama, JP</td>
+<td class="px-6 py-5 text-center font-medium">24</td>
+<td class="px-6 py-5 text-center font-bold text-tertiary-container">45</td>
+<td class="px-6 py-5 text-right">
+<span class="px-2.5 py-1 bg-tertiary-container/20 text-tertiary rounded-md text-[11px] font-black">
+                                        +87%
+                                    </span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-high transition-colors group">
+<td class="px-6 py-5">
+<div class="flex flex-col">
+<span class="font-bold text-on-surface">RG-5529-B</span>
+<span class="text-xs text-on-surface-variant">Retail Apparel</span>
+</div>
+</td>
+<td class="px-6 py-5 text-on-surface-variant">Ningbo, CN</td>
+<td class="px-6 py-5 text-center font-medium">31</td>
+<td class="px-6 py-5 text-center font-bold text-error">64</td>
+<td class="px-6 py-5 text-right">
+<span class="px-2.5 py-1 bg-error-container text-on-error-container rounded-md text-[11px] font-black">
+                                        +106%
+                                    </span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-high transition-colors group">
+<td class="px-6 py-5">
+<div class="flex flex-col">
+<span class="font-bold text-on-surface">RG-8830-Z</span>
+<span class="text-xs text-on-surface-variant">Raw Materials</span>
+</div>
+</td>
+<td class="px-6 py-5 text-on-surface-variant">Sydney, AU</td>
+<td class="px-6 py-5 text-center font-medium">15</td>
+<td class="px-6 py-5 text-center font-bold text-on-surface">18</td>
+<td class="px-6 py-5 text-right">
+<span class="px-2.5 py-1 bg-surface-container-highest text-on-surface-variant rounded-md text-[11px] font-black">
+                                        +20%
+                                    </span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="grid grid-cols-2 gap-6">
+<div class="bg-surface-container-low p-6 rounded-lg flex items-center justify-between">
+<div>
+<p class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mb-1">Mean Score Increase</p>
+<p class="text-4xl font-black text-error tabular-nums">+42.8</p>
+</div>
+<div class="w-12 h-12 rounded-lg bg-error/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-error">trending_up</span>
+</div>
+</div>
+<div class="bg-surface-container-low p-6 rounded-lg flex items-center justify-between">
+<div>
+<p class="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mb-1">Estimated Delay</p>
+<p class="text-4xl font-black text-tertiary tabular-nums">4.2d</p>
+</div>
+<div class="w-12 h-12 rounded-lg bg-tertiary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-tertiary">schedule</span>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+</body></html>
