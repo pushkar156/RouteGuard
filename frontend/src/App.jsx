@@ -4,15 +4,43 @@ import Dashboard from './pages/Dashboard';
 import MapPage from './pages/MapPage';
 import SimulatorPage from './pages/SimulatorPage';
 import AlertsPage from './pages/AlertsPage';
-import { initialShipments, initialAlerts, initialRiskEvents } from './data/shipments';
-
 function App() {
   const [activeScreen, setActiveScreen] = useState('Dashboard');
   const [selectedShipment, setSelectedShipment] = useState(null);
   const [simulationActive, setSimulationActive] = useState(false);
-  const [shipments, setShipments] = useState(initialShipments.map(s => ({...s, riskScore: s.baseRiskScore})));
-  const [alerts, setAlerts] = useState(initialAlerts);
-  const [riskEvents, setRiskEvents] = useState(initialRiskEvents);
+  
+  // Data state
+  const [shipments, setShipments] = useState([]);
+  const [alerts, setAlerts] = useState([]);
+  const [riskEvents, setRiskEvents] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch data from backend API
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [shipmentsRes, alertsRes, eventsRes] = await Promise.all([
+          fetch('http://localhost:3001/api/shipments'),
+          fetch('http://localhost:3001/api/alerts'),
+          fetch('http://localhost:3001/api/events')
+        ]);
+        
+        const shipmentsData = await shipmentsRes.json();
+        const alertsData = await alertsRes.json();
+        const eventsData = await eventsRes.json();
+
+        setShipments(shipmentsData.map(s => ({...s, riskScore: s.baseRiskScore})));
+        setAlerts(alertsData);
+        setRiskEvents(eventsData);
+      } catch (error) {
+        console.error("Failed to load data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const resolveAlert = (alertId) => {
     setAlerts(prev => prev.map(a => a.id === alertId ? { ...a, resolved: true } : a));
@@ -81,7 +109,16 @@ function App() {
 
   return (
     <Layout activeScreen={activeScreen} setActiveScreen={setActiveScreen}>
-      {renderActiveScreen()}
+      {loading ? (
+        <div className="flex h-full items-center justify-center text-slate-400">
+          <div className="flex flex-col items-center gap-4">
+            <div className="h-10 w-10 animate-spin rounded-full border-4 border-slate-700 border-t-primary"></div>
+            Connecting to Intelligence Engine...
+          </div>
+        </div>
+      ) : (
+        renderActiveScreen()
+      )}
     </Layout>
   );
 }
