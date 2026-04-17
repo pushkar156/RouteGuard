@@ -17,7 +17,7 @@ const Dashboard = ({ shipments, alerts, selectedShipment, setSelectedShipment, s
   const currentShipment = selectedShipment ? shipments.find(s => s.id === selectedShipment) : null;
 
   return (
-    <div className="flex-1 flex flex-col h-full overflow-hidden relative">
+    <div className="flex-1 flex flex-col h-full overflow-hidden relative fade-in">
       {simulationActive && (
         <div className="w-full bg-primary-container text-on-primary-container py-2 px-8 flex items-center justify-center font-bold text-sm tracking-wide gap-2 shrink-0 z-10 shadow-md">
           <span className="material-symbols-outlined">warning</span>
@@ -84,12 +84,15 @@ const Dashboard = ({ shipments, alerts, selectedShipment, setSelectedShipment, s
                   const riskInfo = getRiskInfo(shipment.riskScore);
                   const isSelected = selectedShipment === shipment.id;
                   
-                  return (
-                    <tr 
-                      key={shipment.id} 
-                      className={`transition-colors cursor-pointer group ${isSelected ? 'bg-surface-container-high' : 'hover:bg-surface-container-high'}`}
-                      onClick={() => setSelectedShipment(shipment.id)}
-                    >
+                    return (
+                      <tr 
+                        key={shipment.id} 
+                        className={`transition-all cursor-pointer group 
+                          ${isSelected ? 'bg-surface-container-high' : 'hover:bg-surface-container-high'}
+                          ${shipment.riskScore >= 80 ? 'animate-pulse-error' : ''}
+                        `}
+                        onClick={() => setSelectedShipment(shipment.id)}
+                      >
                       <td className="px-6 py-5 font-mono text-primary font-bold">{shipment.id}</td>
                       <td className="px-6 py-5">
                         {shipment.origin} <span className="text-secondary mx-1">→</span> {shipment.destination}
@@ -127,7 +130,7 @@ const Dashboard = ({ shipments, alerts, selectedShipment, setSelectedShipment, s
 
         {/* Summary Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 shrink-0">
-          <div className="bg-surface-container-low p-6 rounded-xl relative overflow-hidden group">
+          <div className="bg-glass p-6 rounded-xl relative overflow-hidden group shadow-sm">
             <div className="relative z-10">
               <span className="text-[0.6875rem] uppercase tracking-[0.05em] font-bold text-on-surface-variant">Total Shipments</span>
               <div className="text-5xl font-black tracking-tighter mt-2">{shipments.length}</div>
@@ -136,10 +139,10 @@ const Dashboard = ({ shipments, alerts, selectedShipment, setSelectedShipment, s
                 <span>Active global operations</span>
               </div>
             </div>
-            <span className="material-symbols-outlined absolute -bottom-4 -right-4 text-9xl opacity-20 text-secondary">inventory_2</span>
+            <span className="material-symbols-outlined absolute -bottom-4 -right-4 text-9xl opacity-10 text-secondary">inventory_2</span>
           </div>
           
-          <div className="bg-surface-container-low p-6 rounded-xl relative overflow-hidden group">
+          <div className="bg-glass p-6 rounded-xl relative overflow-hidden group shadow-sm">
             <div className="relative z-10">
               <span className="text-[0.6875rem] uppercase tracking-[0.05em] font-bold text-on-surface-variant">High Risk</span>
               <div className="text-5xl font-black tracking-tighter mt-2 text-error">0{highRiskCount}</div>
@@ -148,11 +151,11 @@ const Dashboard = ({ shipments, alerts, selectedShipment, setSelectedShipment, s
                 <span>Immediate action required</span>
               </div>
             </div>
-            <span className="material-symbols-outlined absolute -bottom-4 -right-4 text-9xl opacity-20 text-error">report_problem</span>
+            <span className="material-symbols-outlined absolute -bottom-4 -right-4 text-9xl opacity-10 text-error">report_problem</span>
           </div>
 
           <div 
-            className="bg-surface-container-low p-6 rounded-xl relative overflow-hidden group cursor-pointer hover:bg-surface-container-high transition-colors"
+            className="bg-glass p-6 rounded-xl relative overflow-hidden group cursor-pointer hover:bg-surface-container-high transition-colors shadow-sm"
             onClick={() => setActiveScreen('Alerts')}
           >
             <div className="relative z-10">
@@ -163,7 +166,7 @@ const Dashboard = ({ shipments, alerts, selectedShipment, setSelectedShipment, s
                 <span>Across system</span>
               </div>
             </div>
-            <span className="material-symbols-outlined absolute -bottom-4 -right-4 text-9xl opacity-20 text-tertiary">notifications_active</span>
+            <span className="material-symbols-outlined absolute -bottom-4 -right-4 text-9xl opacity-10 text-tertiary">notifications_active</span>
           </div>
         </div>
       </div>

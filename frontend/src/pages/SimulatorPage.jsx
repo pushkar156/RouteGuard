@@ -28,7 +28,7 @@ const SimulatorPage = ({ shipments, simulationActive, triggerSimulation, resetSi
   const meanIncrease = impactedList.length > 0 ? (totalImpact / impactedList.length).toFixed(1) : '0.0';
 
   return (
-    <div className="flex-1 flex flex-col h-full bg-surface overflow-auto">
+    <div className="flex-1 flex flex-col h-full bg-surface overflow-auto fade-in">
       <header className="w-full flex justify-center px-8 h-24 mb-4 shrink-0 flex-col">
         <div className="flex items-center justify-between">
           <div>
@@ -41,7 +41,7 @@ const SimulatorPage = ({ shipments, simulationActive, triggerSimulation, resetSi
       <div className="px-8 pb-12 flex gap-8">
         {/* Left Panel */}
         <section className="w-[40%] space-y-6">
-          <div className="bg-surface-container-low p-8 rounded-xl shadow-sm border border-outline-variant/10">
+          <div className="bg-glass p-8 rounded-xl shadow-sm">
             <div className="flex items-center justify-between mb-8">
               <h3 className="text-xs font-bold uppercase tracking-[0.1em] text-on-surface-variant">Simulation Parameters</h3>
               {simulationActive && (
@@ -157,7 +157,7 @@ const SimulatorPage = ({ shipments, simulationActive, triggerSimulation, resetSi
           </div>
 
           <div className="grid grid-cols-2 gap-6">
-             <div className="bg-surface-container-low p-6 rounded-xl flex items-center justify-between border border-outline-variant/10">
+             <div className="bg-glass p-6 rounded-xl flex items-center justify-between shadow-sm">
                 <div>
                   <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mb-1">Mean Score Increase</p>
                   <p className="text-4xl font-black text-error tabular-nums">+{meanIncrease}</p>
@@ -166,7 +166,7 @@ const SimulatorPage = ({ shipments, simulationActive, triggerSimulation, resetSi
                   <span className="material-symbols-outlined text-error">trending_up</span>
                 </div>
              </div>
-             <div className="bg-surface-container-low p-6 rounded-xl flex items-center justify-between border border-outline-variant/10">
+             <div className="bg-glass p-6 rounded-xl flex items-center justify-between shadow-sm">
                 <div>
                   <p className="text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mb-1">Impacted Shipments</p>
                   <p className="text-4xl font-black text-tertiary tabular-nums">{impactedList.length}</p>
@@ -176,6 +176,7 @@ const SimulatorPage = ({ shipments, simulationActive, triggerSimulation, resetSi
                 </div>
              </div>
           </div>
+
         </section>
       </div>
     </div>

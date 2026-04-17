@@ -5,7 +5,7 @@ const AlertsPage = ({ alerts, resolveAlert }) => {
   const resolvedAlerts = alerts.filter(a => a.resolved);
 
   return (
-    <div className="flex-1 flex flex-col h-full bg-surface overflow-auto">
+    <div className="flex-1 flex flex-col h-full bg-surface overflow-auto fade-in">
       <header className="w-full flex justify-center px-8 h-24 mb-4 shrink-0 flex-col">
         <div className="flex items-center justify-between">
           <div>
@@ -30,7 +30,7 @@ const AlertsPage = ({ alerts, resolveAlert }) => {
           </h3>
           <div className="space-y-4">
             {unresolvedAlerts.length > 0 ? unresolvedAlerts.map(alert => (
-              <div key={alert.id} className="bg-surface-container-low border border-outline-variant/20 rounded-xl p-5 flex items-start justify-between group hover:border-primary/30 transition-colors">
+              <div key={alert.id} className="bg-glass border border-outline-variant/20 rounded-xl p-5 flex items-start justify-between group hover:border-primary/30 transition-colors shadow-sm">
                 <div className="flex items-start gap-4">
                   <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${alert.score >= 70 ? 'bg-error/10 text-error' : 'bg-tertiary/10 text-tertiary'}`}>
                     <span className="material-symbols-outlined">{alert.score >= 70 ? 'error' : 'warning'}</span>

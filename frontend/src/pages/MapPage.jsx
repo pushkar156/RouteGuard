@@ -4,7 +4,7 @@ import { getRiskInfo } from '../data/shipments';
 
 const MapPage = ({ shipments, riskEvents, selectedShipment, setSelectedShipment, simulationActive }) => {
   return (
-    <div className="flex-1 flex flex-col h-full bg-surface-container-lowest relative text-on-surface">
+    <div className="flex-1 flex flex-col h-full bg-surface-container-lowest relative text-on-surface fade-in">
       {simulationActive && (
         <div className="w-full bg-primary-container text-on-primary-container py-2 px-8 flex items-center justify-center font-bold text-sm tracking-wide gap-2 shrink-0 z-[60] shadow-md absolute top-0 left-0">
           <span className="material-symbols-outlined">warning</span>
@@ -13,7 +13,7 @@ const MapPage = ({ shipments, riskEvents, selectedShipment, setSelectedShipment,
       )}
 
       {/* Top Bar Floating above Map */}
-      <header className={`absolute ${simulationActive ? 'top-10' : 'top-0'} left-0 right-0 flex items-center justify-between px-8 h-20 bg-surface/80 backdrop-blur-md border-b border-outline-variant/30 z-40`}>
+      <header className={`absolute ${simulationActive ? 'top-10' : 'top-0'} left-0 right-0 flex items-center justify-between px-8 h-20 bg-glass z-40`}>
         <div>
           <h2 className="text-xl font-bold tracking-tight text-on-surface">Global Fleet Tracking</h2>
           <p className="text-[11px] text-secondary flex items-center gap-1.5 uppercase tracking-wide">
@@ -79,7 +79,7 @@ const MapPage = ({ shipments, riskEvents, selectedShipment, setSelectedShipment,
            />
 
            {/* Floating Legend */}
-            <div className="absolute top-6 right-6 bg-surface-container-high/90 backdrop-blur-md border border-outline-variant/50 p-4 rounded-xl shadow-2xl z-[1000] w-52 pointer-events-none">
+            <div className="absolute top-6 right-6 bg-glass p-4 rounded-xl shadow-2xl z-[1000] w-52 pointer-events-none">
                 <h3 className="text-[10px] font-black uppercase tracking-widest text-secondary mb-3">Map Legend</h3>
                 <div className="space-y-2.5">
                     <div className="flex items-center gap-3">

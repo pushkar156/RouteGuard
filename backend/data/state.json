@@ -1,0 +1,103 @@
+{
+  "events": [
+    {
+      "id": "E1",
+      "lat": 31.2,
+      "lng": 121.5,
+      "type": "cyclone",
+      "severity": "high",
+      "title": "Typhoon Songda",
+      "desc": "Shanghai port operations suspended for 36h. Significant backlogs expected."
+    },
+    {
+      "id": "E2",
+      "lat": 51.9,
+      "lng": 4.1,
+      "type": "engineering",
+      "severity": "high",
+      "title": "Rotterdam Port Strike",
+      "desc": "Union action at ECT Delta terminal. Berth utilization at 0%. Diverting SHP-005 to Antwerp."
+    },
+    {
+      "id": "E3",
+      "lat": 29.9,
+      "lng": 32.5,
+      "type": "policy",
+      "severity": "medium",
+      "title": "Suez Canal Congestion",
+      "desc": "Increased wait times at Southern anchorage due to minor technical grounding. +12h delay."
+    }
+  ],
+  "alerts": [
+    {
+      "id": "A-1776461212908-789",
+      "shipmentId": "SHP-005",
+      "eventId": "E2",
+      "title": "Action Required: Rotterdam Port Strike",
+      "score": 83,
+      "timestamp": "Just now",
+      "resolved": false,
+      "message": "Score threshold exceeded (83/100) due to engineering."
+    },
+    {
+      "id": "A-1776461212537-874",
+      "shipmentId": "SHP-001",
+      "eventId": "E1",
+      "title": "Action Required: Typhoon Songda",
+      "score": 67,
+      "timestamp": "Just now",
+      "resolved": false,
+      "message": "Score threshold exceeded (67/100) due to cyclone."
+    },
+    {
+      "id": "A1",
+      "shipmentId": "SHP-001",
+      "eventId": "E1",
+      "title": "Typhoon Songda Impact",
+      "score": 92,
+      "timestamp": "12m ago",
+      "resolved": false,
+      "message": "Hurricane force winds expected along path. Route recalculation required."
+    },
+    {
+      "id": "A2",
+      "shipmentId": "SHP-005",
+      "eventId": "E2",
+      "title": "Rotterdam Diversion",
+      "score": 88,
+      "timestamp": "1h ago",
+      "resolved": false,
+      "message": "Terminal offline. Suggest rerouting to Antwerp or Hamburg."
+    },
+    {
+      "id": "A3",
+      "shipmentId": "SHP-008",
+      "eventId": "E3",
+      "title": "Suez Congestion",
+      "score": 45,
+      "timestamp": "3h ago",
+      "resolved": false,
+      "message": "Minor grounding event has halted northbound convoy."
+    },
+    {
+      "id": "A4",
+      "shipmentId": "SHP-022",
+      "eventId": null,
+      "title": "Piracy Warning",
+      "score": 65,
+      "timestamp": "5h ago",
+      "resolved": false,
+      "message": "Heightened piracy activity reported in Malacca Strait."
+    },
+    {
+      "id": "A5",
+      "shipmentId": "SHP-012",
+      "eventId": null,
+      "title": "Vessel Maintenance",
+      "score": 30,
+      "timestamp": "1d ago",
+      "resolved": true,
+      "message": "Scheduled engine maintenance completed successfully."
+    }
+  ]
+}
