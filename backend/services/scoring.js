@@ -39,17 +39,14 @@ const getSeverityPoints = (severity) => {
  * events are nearby, preventing silent no-event shipments from always showing 0.
  */
 export const recalculateShipmentScore = (shipment, activeEvents) => {
-  // ✅ Bug #2 Fixed: scoreAccumulator is normalised to 0-100 range
-  // Each event contributes: severity (4-20) × weight (0.5-1.5) × proximity (0.1-1.0)
-  // Max single event raw score: 20 * 1.5 * 1.0 = 30
-  // We scale the total accumulator to 0-100 by multiplying by a normalisation factor
-  const SCALE_FACTOR = 3.5; // Tuned so a max-severity close event hits ~100
+  // scoreAccumulator is normalised to 0-100 range
+  const SCALE_FACTOR = 2.8; // Tuned for the new 500km radius range
 
   let scoreAccumulator = 0;
   let matchingEvents = [];
 
   for (const event of activeEvents) {
-    const impact = getShipmentImpact(event, shipment, 300); // 300km critical radius
+    const impact = getShipmentImpact(event, shipment, 500); // 500km critical radius
 
     if (impact.affected) {
       // 1. Base Severity Points (severity 1-5 → 4-20 points)
@@ -59,7 +56,7 @@ export const recalculateShipmentScore = (shipment, activeEvents) => {
       const typeWeight = RISK_WEIGHTS[event.type?.toLowerCase()] || 1.0;
 
       // 3. Proximity Factor (1.0 at epicentre, 0.1 at edge of radius)
-      const proximityFactor = Math.max(0.1, 1 - (impact.distance / 300));
+      const proximityFactor = Math.max(0.05, 1 - (impact.distance / 500));
 
       const eventScore = basePoints * typeWeight * proximityFactor;
       scoreAccumulator += eventScore;
@@ -71,8 +68,7 @@ export const recalculateShipmentScore = (shipment, activeEvents) => {
     }
   }
 
-  // ✅ If events are affecting this ship, let the math drive the score
-  //    If no events, fall back to the static baseRiskScore
+  // If events are affecting this ship, let the math drive the score
   const finalDynamicScore = matchingEvents.length > 0
     ? Math.min(100, Math.round(scoreAccumulator * SCALE_FACTOR))
     : shipment.baseRiskScore;

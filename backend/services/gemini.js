@@ -100,7 +100,8 @@ export const generateReroutingSuggestions = async (shipment, event) => {
         estimated_delay_hours: 24,
         estimated_cost_increase_percent: 15,
         risk_reduction: 45,
-        reasoning: "Diverts around the affected area using secondary rail networks. (Simulated AI response)"
+        reasoning: "Diverts around the affected area using secondary rail networks. (Simulated AI response)",
+        suggested_path: [[19.0, 72.8], [34.0, 69.0], [52.0, 4.0]] // Example path
       }
     ];
   }
@@ -131,7 +132,12 @@ export const generateReroutingSuggestions = async (shipment, event) => {
                         estimated_delay_hours: { type: Type.INTEGER },
                         estimated_cost_increase_percent: { type: Type.INTEGER },
                         risk_reduction: { type: Type.INTEGER },
-                        reasoning: { type: Type.STRING }
+                        reasoning: { type: Type.STRING },
+                        suggested_path: { 
+                          type: Type.ARRAY, 
+                          items: { type: Type.ARRAY, items: { type: Type.NUMBER } },
+                          description: "An array of [lat, lng] pairs representing the safest alternative path."
+                        }
                     }
                 }
             }

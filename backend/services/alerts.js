@@ -10,6 +10,7 @@ import { generateReroutingSuggestions } from './gemini.js';
 export const evaluateShipmentAlerts = async (shipments, existingAlerts) => {
   const newAlerts = [];
   const updatedAlertsList = [...existingAlerts];
+  const updatedShipments = [...shipments];
 
   for (const shipment of shipments) {
     // Only care about shipments with dynamic risk events that push score > 40
@@ -36,6 +37,9 @@ export const evaluateShipmentAlerts = async (shipments, existingAlerts) => {
           
           if (aiAdvice && aiAdvice.length > 0) {
             alertMessage += ` AI SUGGESTS: ${aiAdvice[0].route_name} (+${aiAdvice[0].estimated_delay_hours}h). Reasoning: ${aiAdvice[0].reasoning}`;
+            // Attach advice to shipment for map visualization
+            shipment.advisorPath = aiAdvice[0].suggested_path;
+            shipment.advisorReasoning = aiAdvice[0].reasoning;
           }
         }
 
@@ -60,6 +64,7 @@ export const evaluateShipmentAlerts = async (shipments, existingAlerts) => {
 
   return {
     newAlerts,
-    updatedAlertsList
+    updatedAlertsList,
+    updatedShipments
   };
 };

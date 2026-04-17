@@ -191,12 +191,12 @@ app.post('/api/process-signals', async (req, res) => {
   shipments = updateAllShipmentScores(shipments, events);
   console.log('✅ Shipment risk scores updated successfully.');
 
-  // Phase 4: Action Layer triggering!
   // Check if the rescored shipments breached the threshold to generate an alert
   console.log('🔔 Evaluating shipments for threshold breaches...');
   const alertEvaluation = await evaluateShipmentAlerts(shipments, alerts);
   if (alertEvaluation.newAlerts.length > 0) {
     alerts = alertEvaluation.updatedAlertsList;
+    shipments = alertEvaluation.updatedShipments; // Capture the AI-suggested paths
     console.log(`📡 Broadcasted ${alertEvaluation.newAlerts.length} new actionable alerts.`);
   }
 

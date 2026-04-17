@@ -31,11 +31,7 @@ npm-debug.log*
 Thumbs.db
 Desktop.ini
 
-# (REMOVED: docs/ - judges need to see your documentation!)
-
 
 docs/
-reference/
-
 docs/IMPLEMENTATION_STRATEGY.md
 docs/RouteGuard_ProjectPlan.docx

@@ -106,9 +106,35 @@ const MultiMapComponent = ({ shipments, riskEvents, selectedShipment, onSelectSh
                     </div>
                     <span className="text-xs font-bold" style={{ color }}>{Math.round(shipment.riskScore)}% Risk</span>
                   </div>
+                  {shipment.advisorPath && (
+                    <div className="mt-2 pt-2 border-t border-outline-variant/30">
+                       <p className="text-[9px] font-bold text-primary flex items-center gap-1 uppercase tracking-wide">
+                         <span className="material-symbols-outlined text-[10px]">auto_awesome</span> AI Advisor Ready
+                       </p>
+                       <p className="text-[10px] text-on-surface-variant italic leading-tight">"{shipment.advisorReasoning}"</p>
+                    </div>
+                  )}
                 </div>
               </Popup>
             </Polyline>
+
+            {/* 🔥 AI Suggested Reroute Path (Green Dotted) */}
+            {shipment.advisorPath && (
+              <Polyline 
+                positions={shipment.advisorPath}
+                color="#10b981"
+                weight={isSelected ? 3 : 1.5}
+                opacity={0.8}
+                dashArray="4, 6"
+              >
+                <Popup>
+                   <div className="p-1">
+                      <p className="text-[10px] font-black text-primary uppercase tracking-widest mb-1">AI Recommended Safe Route</p>
+                      <p className="text-xs text-on-surface-variant">{shipment.advisorReasoning}</p>
+                   </div>
+                </Popup>
+              </Polyline>
+            )}
             
             {/* Visual indicator for current location (first coord for demo) */}
             <Marker 
