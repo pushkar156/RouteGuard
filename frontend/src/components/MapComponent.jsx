@@ -41,13 +41,15 @@ const MapComponent = ({ center = [22.3964, 114.1095], routes = [] }) => {
         {/* Render mock routes/events if provided */}
         {routes.map((route, idx) => (
           <React.Fragment key={idx}>
-            <Marker position={route.position} icon={customMarkerIcon}>
-              <Popup className="dark-popup">
-                <div className="font-bold text-on-surface">{route.name}</div>
-                <div className="text-xs text-error">{route.severity}</div>
-              </Popup>
-            </Marker>
-            {route.path && <Polyline positions={route.path} color={route.color || "#f97316"} weight={3} dashArray="5, 10" />}
+            {route.position && (
+              <Marker position={route.position} icon={customMarkerIcon}>
+                <Popup className="dark-popup">
+                  <div className="font-bold text-on-surface">{route.name}</div>
+                  <div className="text-xs text-error font-bold">{route.severity}</div>
+                </Popup>
+              </Marker>
+            )}
+            {route.path && <Polyline positions={route.path} color={route.color || "#f97316"} weight={3} dashArray="5, 5" />}
           </React.Fragment>
         ))}
       </MapContainer>

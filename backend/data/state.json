@@ -26,9 +26,29 @@
       "severity": "medium",
       "title": "Suez Canal Congestion",
       "desc": "Increased wait times at Southern anchorage due to minor technical grounding. +12h delay."
+    },
+    {
+      "id": "E-AI-1776462138094-653",
+      "lat": 20,
+      "lng": 39,
+      "type": "political",
+      "severity": "critical",
+      "title": "US cites optimism over a deal even as Iran threatens to shut down Red Sea shipping",
+      "desc": "Iran threatens to shut down Red Sea shipping in response to intensifying US sanctions, posing a catastrophic risk to global oil and goods transit.",
+      "source": "The Star"
     }
   ],
   "alerts": [
+    {
+      "id": "A-1776462148445-240",
+      "shipmentId": "SHP-008",
+      "eventId": "E-AI-1776462138094-653",
+      "title": "Action Required: US cites optimism over a deal even as Iran threatens to shut down Red Sea shipping",
+      "score": 100,
+      "timestamp": "Just now",
+      "resolved": false,
+      "message": "Score threshold exceeded (100/100) due to political."
+    },
     {
       "id": "A-1776461212908-789",
       "shipmentId": "SHP-005",
