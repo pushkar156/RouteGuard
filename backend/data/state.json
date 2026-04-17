@@ -50,6 +50,16 @@
   ],
   "alerts": [
     {
+      "id": "A-1776464081554-275",
+      "shipmentId": "SHP-038",
+      "eventId": "E-AI-1776463052802-935",
+      "title": "Action Required: Cathay Pacific Suspends Flights Amid Middle East Turmoil",
+      "score": 54,
+      "timestamp": "Just now",
+      "resolved": false,
+      "message": "Score threshold exceeded (54/100) due to political."
+    },
+    {
       "id": "A-1776463055861-958",
       "shipmentId": "SHP-038",
       "eventId": "E-AI-1776463052802-935",
