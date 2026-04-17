@@ -60,3 +60,8 @@ $RECYCLE.BIN/
 *.sln
 *.sw?
 *.pem
+
+
+docs/
+docs/IMPLEMENTATION_STRATEGY.md
+docs/RouteGuard_ProjectPlan.docx
