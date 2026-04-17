@@ -1,6 +1,9 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import { initialShipments, initialAlerts, initialRiskEvents } from './data/mockData.js';
 import { fetchGNewsArticles } from './connectors/gnews.js';
 import { isRelevant } from './utils/filter.js';
@@ -10,6 +13,10 @@ import { evaluateShipmentAlerts } from './services/alerts.js';
 
 dotenv.config();
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const STATE_FILE = path.join(__dirname, 'data', 'state.json');
+
 const app = express();
 const PORT = process.env.PORT || 3001;
 
@@ -17,12 +24,40 @@ const PORT = process.env.PORT || 3001;
 app.use(cors());
 app.use(express.json());
 
-// In-memory data store (temporarily simulating a database)
+// In-memory data store (Initialised from state.json if exists)
 let shipments = [...initialShipments];
 let alerts = [...initialAlerts];
 let events = [...initialRiskEvents];
-// To store raw filtered articles ready to be sent to Gemini in Phase 2
 let pendingRawSignals = [];
+
+// Persistence Helpers
+const saveState = () => {
+  try {
+    const data = JSON.stringify({ events, alerts }, null, 2);
+    // Ensure data directory exists
+    const dir = path.dirname(STATE_FILE);
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+    fs.writeFileSync(STATE_FILE, data);
+  } catch (err) {
+    console.error('Failed to save state:', err);
+  }
+};
+
+const loadState = () => {
+  try {
+    if (fs.existsSync(STATE_FILE)) {
+      const data = JSON.parse(fs.readFileSync(STATE_FILE, 'utf8'));
+      events = data.events || [...initialRiskEvents];
+      alerts = data.alerts || [...initialAlerts];
+      console.log(`✅ Loaded ${events.length} events and ${alerts.length} alerts from state.json`);
+    }
+  } catch (err) {
+    console.warn('Could not load state, using defaults:', err);
+  }
+};
+
+// Start the engine with saved data
+loadState();
 
 // --- Routes ---
 
@@ -56,6 +91,7 @@ app.patch('/api/alerts/:id/resolve', (req, res) => {
   const alert = alerts.find(a => a.id === req.params.id);
   if (!alert) return res.status(404).json({ error: 'Alert not found.' });
   alert.resolved = true;
+  saveState();
   res.json({ success: true, alertId: req.params.id });
 });
 
@@ -163,6 +199,8 @@ app.post('/api/process-signals', async (req, res) => {
     alerts = alertEvaluation.updatedAlertsList;
     console.log(`📡 Broadcasted ${alertEvaluation.newAlerts.length} new actionable alerts.`);
   }
+
+  saveState();
 
   res.json({
     message: 'Finished AI processing and Geo-Matching.',
