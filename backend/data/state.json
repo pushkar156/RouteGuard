@@ -36,9 +36,29 @@
       "title": "US cites optimism over a deal even as Iran threatens to shut down Red Sea shipping",
       "desc": "Iran threatens to shut down Red Sea shipping in response to intensifying US sanctions, posing a catastrophic risk to global oil and goods transit.",
       "source": "The Star"
+    },
+    {
+      "id": "E-AI-1776463052802-935",
+      "lat": 25.276987,
+      "lng": 55.296249,
+      "type": "political",
+      "severity": "high",
+      "title": "Cathay Pacific Suspends Flights Amid Middle East Turmoil",
+      "desc": "Cathay Pacific has suspended cargo services to Dubai and Riyadh due to ongoing Middle East conflict, impacting air freight logistics and supply chain operations to these key regional hubs.",
+      "source": "Devdiscourse"
     }
   ],
   "alerts": [
+    {
+      "id": "A-1776463055861-958",
+      "shipmentId": "SHP-038",
+      "eventId": "E-AI-1776463052802-935",
+      "title": "Action Required: Cathay Pacific Suspends Flights Amid Middle East Turmoil",
+      "score": 55,
+      "timestamp": "Just now",
+      "resolved": true,
+      "message": "Score threshold exceeded (55/100) due to political."
+    },
     {
       "id": "A-1776462148445-240",
       "shipmentId": "SHP-008",

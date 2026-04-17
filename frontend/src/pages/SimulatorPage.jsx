@@ -1,4 +1,14 @@
 import React, { useState } from 'react';
+import MapComponent from '../components/MapComponent';
+
+// Helper to get coordinates for the map
+const TARGET_COORDS = {
+  'Rotterdam': [51.9, 4.1],
+  'Shanghai': [31.2, 121.5],
+  'Singapore': [1.3, 103.8],
+  'Los Angeles': [33.7, -118.2],
+  'Suez Canal': [29.9, 32.5],
+};
 
 const SimulatorPage = ({ shipments, simulationActive, triggerSimulation, resetSimulation }) => {
   const [targetLocation, setTargetLocation] = useState('Rotterdam');
@@ -41,8 +51,28 @@ const SimulatorPage = ({ shipments, simulationActive, triggerSimulation, resetSi
       <div className="px-8 pb-12 flex gap-8">
         {/* Left Panel */}
         <section className="w-[40%] space-y-6">
-          <div className="bg-glass p-8 rounded-xl shadow-sm">
-            <div className="flex items-center justify-between mb-8">
+          <div className="bg-glass rounded-xl shadow-sm overflow-hidden">
+             {/* Target Visualization Map */}
+             <div className="h-64 bg-surface-container-highest relative group">
+                <MapComponent 
+                  center={TARGET_COORDS[targetLocation]} 
+                  routes={[
+                    { 
+                      position: TARGET_COORDS[targetLocation], 
+                      name: targetLocation, 
+                      severity: 'CRITICAL',
+                      isPulse: true 
+                    }
+                  ]} 
+                />
+                <div className="absolute top-4 left-4 z-[1000] bg-error text-on-error px-3 py-1 rounded-full text-[10px] font-black tracking-widest animate-pulse flex items-center gap-1">
+                   <span className="material-symbols-outlined text-xs">gps_fixed</span>
+                   TARGET ACQUIRED
+                </div>
+             </div>
+
+             <div className="p-8">
+               <div className="flex items-center justify-between mb-8">
               <h3 className="text-xs font-bold uppercase tracking-[0.1em] text-on-surface-variant">Simulation Parameters</h3>
               {simulationActive && (
                 <span className="flex items-center gap-1.5 px-3 py-1 bg-primary/10 text-primary rounded-full text-[10px] font-bold tracking-wide">
@@ -115,7 +145,8 @@ const SimulatorPage = ({ shipments, simulationActive, triggerSimulation, resetSi
               </div>
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
         {/* Right Panel */}
         <section className="w-[60%] space-y-6">

@@ -1,5 +1,5 @@
 import React from 'react';
-import { MapContainer, TileLayer, Marker, Popup, Polyline } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, Polyline, Circle } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
@@ -47,6 +47,19 @@ const MapComponent = ({ center = [22.3964, 114.1095], routes = [] }) => {
                   <div className="font-bold text-on-surface">{route.name}</div>
                   <div className="text-xs text-error font-bold">{route.severity}</div>
                 </Popup>
+                {route.isPulse && (
+                  <Circle 
+                    center={route.position} 
+                    radius={500000} 
+                    pathOptions={{ 
+                      color: '#ba1a1a', 
+                      fillColor: '#ba1a1a', 
+                      fillOpacity: 0.1,
+                      weight: 2,
+                      dashArray: '10, 10'
+                    }} 
+                  />
+                )}
               </Marker>
             )}
             {route.path && <Polyline positions={route.path} color={route.color || "#f97316"} weight={3} dashArray="5, 5" />}

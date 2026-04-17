@@ -61,8 +61,14 @@ function App() {
   // Initial load + 30s polling
   useEffect(() => {
     fetchData();
-    const interval = setInterval(fetchData, 30000);
-    return () => clearInterval(interval);
+    
+    // 🔥 LIVE SYNC: Pulse the backend every 30 seconds to fetch moving ships & new alerts
+    const syncInterval = setInterval(() => {
+      console.log('📡 Auto-syncing live fleet data...');
+      fetchData();
+    }, 30000);
+
+    return () => clearInterval(syncInterval);
   }, []);
 
   const resolveAlert = async (alertId) => {
@@ -172,7 +178,7 @@ function App() {
   };
 
   return (
-    <Layout activeScreen={activeScreen} setActiveScreen={setActiveScreen}>
+    <Layout activeScreen={activeScreen} setActiveScreen={setActiveScreen} isProcessing={isProcessing}>
       {loading ? (
         <div className="flex h-full items-center justify-center text-slate-400">
           <div className="flex flex-col items-center gap-4">

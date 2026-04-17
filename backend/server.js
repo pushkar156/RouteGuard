@@ -18,6 +18,40 @@ const __dirname = path.dirname(__filename);
 const STATE_FILE = path.join(__dirname, 'data', 'state.json');
 
 const app = express();
+
+// 🔥 SHIP MOVEMENT ENGINE: Simulates live AIS movement every 30 seconds
+setInterval(() => {
+  let moved = false;
+  shipments = shipments.map(s => {
+    if (s.coords && s.coords.length > 1) {
+      // Logic: Shift the first coordinate closer to the second one
+      // We simulate progress by slowly interpolating the position
+      const current = s.coords[0];
+      const target = s.coords[1];
+      
+      const stepSize = 0.002; // 0.2% move per tick
+      const newLat = current[0] + (target[0] - current[0]) * stepSize;
+      const newLng = current[1] + (target[1] - current[1]) * stepSize;
+      
+      // If we are very close to the next point, remove it and proceed to next segment
+      const dist = Math.abs(newLat - target[0]) + Math.abs(newLng - target[1]);
+      if (dist < 0.05 && s.coords.length > 2) {
+         return { ...s, coords: s.coords.slice(1) };
+      }
+
+      moved = true;
+      const newCoords = [...s.coords];
+      newCoords[0] = [newLat, newLng];
+      return { ...s, coords: newCoords };
+    }
+    return s;
+  });
+
+  if (moved) {
+    saveState();
+  }
+}, 30000); // Ticking every 30 seconds for subtle movement
+
 const PORT = process.env.PORT || 3001;
 
 // Middleware

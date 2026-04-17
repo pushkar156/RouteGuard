@@ -45,6 +45,25 @@ const AlertsPage = ({ alerts, resolveAlert }) => {
                       <span className="text-[10px] font-bold text-secondary bg-secondary/10 px-2 py-0.5 rounded uppercase font-mono tracking-widest">{alert.shipmentId}</span>
                       {alert.score >= 70 && <span className="text-[10px] font-bold text-error">CRITICAL</span>}
                     </div>
+
+                    {/* 🔥 AI ADVISOR INSIGHTS */}
+                    {alert.reasoning && (
+                      <div className="mt-4 p-4 bg-primary/5 border border-primary/20 rounded-lg flex items-start gap-3">
+                         <span className="material-symbols-outlined text-primary text-lg animate-pulse">auto_awesome</span>
+                         <div>
+                            <p className="text-[11px] font-black text-primary uppercase tracking-widest mb-1">AI Advisor Recommendation</p>
+                            <p className="text-xs text-on-surface-variant leading-relaxed italic">
+                              "{alert.reasoning}"
+                            </p>
+                            {alert.suggested_path && (
+                              <div className="mt-2 flex items-center gap-2 text-[10px] font-bold text-primary">
+                                 <span className="material-symbols-outlined text-xs">alt_route</span>
+                                 SAFER ROUTE CALCULATED
+                              </div>
+                            )}
+                         </div>
+                      </div>
+                    )}
                   </div>
                 </div>
                 <button 

@@ -87,7 +87,8 @@ const Dashboard = ({ shipments, alerts, selectedShipment, setSelectedShipment, s
                     return (
                       <tr 
                         key={shipment.id} 
-                        className={`transition-all cursor-pointer group 
+                        style={{ animationDelay: `${shipments.indexOf(shipment) * 0.05}s` }}
+                        className={`transition-all cursor-pointer group staggered-row
                           ${isSelected ? 'bg-surface-container-high' : 'hover:bg-surface-container-high'}
                           ${shipment.riskScore >= 80 ? 'animate-pulse-error' : ''}
                         `}

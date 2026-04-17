@@ -63,6 +63,22 @@ export const runDiagnostics = async () => {
         }
     }
 
+    // 4. Check Resend
+    const resendKey = process.env.RESEND_API_KEY;
+    if (!resendKey || resendKey === 'your_resend_key_here') {
+        console.log('🔴 Resend Email: MISSING (Using Console Logs Only)');
+    } else {
+        try {
+            const res = await fetch('https://api.resend.com/api-keys', {
+                headers: { 'Authorization': `Bearer ${resendKey}` }
+            });
+            if (res.ok) console.log('🟢 Resend Email: AUTHORIZED & LIVE');
+            else console.log(`🔴 Resend Email: AUTH FAILED (Status: ${res.status})`);
+        } catch (e) {
+            console.log(`🔴 Resend Email: ERROR (${e.message})`);
+        }
+    }
+
     console.log('----------------------------------------\n');
 };
 

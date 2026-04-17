@@ -1,4 +1,5 @@
 import { generateReroutingSuggestions } from './gemini.js';
+import { sendEmergencyEmail } from './notifications.js';
 
 /**
  * Checks all shipments and generates alerts for those that exceed risk thresholds.
@@ -57,6 +58,12 @@ export const evaluateShipmentAlerts = async (shipments, existingAlerts) => {
         newAlerts.push(alert);
         updatedAlertsList.unshift(alert); // Add to beginning of active list
         
+        // 🔥 TRIGGER: If score is critical, send automation email!
+        if (alert.score >= 85) {
+          console.log(`✉️ Dispatching emergency notification for ${shipment.id}...`);
+          sendEmergencyEmail(alert, shipment);
+        }
+
         console.log(`⚠️ New Alert Generated for ${shipment.name}: ${shipment.riskScore >= 70 ? 'CRITICAL' : 'WARNING'}`);
       }
     }
