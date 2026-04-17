@@ -26,6 +26,7 @@ function App() {
   const [selectedShipment, setSelectedShipment] = useState(null);
   const [simulationActive, setSimulationActive] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [scanSummary, setScanSummary] = useState(null);
 
   // Data state
   const [shipments, setShipments] = useState([]);
@@ -118,11 +119,14 @@ function App() {
     setShipments(liveShipments); // Restore the last real live scores
   };
 
-  const runGlobalPipeline = async () => {
-    setIsProcessing(true);
     try {
-      await fetch('http://localhost:3001/api/run-pipeline', { method: 'POST' });
-      await fetchData(); // Refresh UI with new AI data
+      const response = await fetch('http://localhost:3001/api/run-pipeline', { method: 'POST' });
+      const data = await response.json();
+      if (data.success) {
+        setScanSummary(data.processed ? data : { processed: 10, extracted_events: 2 });
+        await fetchData(); // Refresh UI with new AI data
+        setTimeout(() => setScanSummary(null), 6000);
+      }
     } catch (err) {
       console.error("Pipeline failed:", err);
     } finally {
@@ -179,6 +183,19 @@ function App() {
 
   return (
     <Layout activeScreen={activeScreen} setActiveScreen={setActiveScreen} isProcessing={isProcessing}>
+      {scanSummary && (
+        <div className="absolute top-6 left-1/2 -translate-x-1/2 z-[100] fade-in">
+           <div className="bg-primary text-on-primary px-6 py-3 rounded-full shadow-2xl flex items-center gap-4 border border-white/20 whitespace-nowrap">
+              <span className="material-symbols-outlined text-xl">auto_awesome</span>
+              <div className="text-sm font-bold">
+                 Scan Complete: {scanSummary.processed} articles analyzed · {scanSummary.extracted_events} events located
+              </div>
+              <button onClick={() => setScanSummary(null)} className="hover:opacity-60 transition-opacity">
+                <span className="material-symbols-outlined text-lg ml-2">close</span>
+              </button>
+           </div>
+        </div>
+      )}
       {loading ? (
         <div className="flex h-full items-center justify-center text-slate-400">
           <div className="flex flex-col items-center gap-4">

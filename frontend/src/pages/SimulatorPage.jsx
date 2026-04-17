@@ -18,6 +18,8 @@ const SimulatorPage = ({ shipments, simulationActive, triggerSimulation, resetSi
 
   const handleTrigger = async () => {
     setIsLoading(true);
+    // Add a slight artificial delay for psychological UX (shows the 'work' being done)
+    await new Promise(r => setTimeout(r, 800)); 
     await triggerSimulation(targetLocation, parseInt(severity, 10), disruptionType);
     setIsLoading(false);
   };
@@ -154,7 +156,16 @@ const SimulatorPage = ({ shipments, simulationActive, triggerSimulation, resetSi
             <div className="p-6 pb-2">
                <h3 className="text-xs font-bold uppercase tracking-[0.1em] text-on-surface-variant mb-4">Simulated Shipment Impact</h3>
             </div>
-            <table className="w-full text-left">
+            <div className="relative">
+              {isLoading && (
+                <div className="absolute inset-0 z-10 bg-surface-container-low/60 backdrop-blur-[2px] flex items-center justify-center fade-in">
+                   <div className="flex items-center gap-3 px-4 py-2 bg-surface-container-high rounded-full border border-outline-variant/30 shadow-lg text-xs font-bold text-primary">
+                      <span className="material-symbols-outlined text-sm animate-spin">sync</span>
+                      AI Recalculating Fleet Risk...
+                   </div>
+                </div>
+              )}
+              <table className="w-full text-left">
               <thead>
                 <tr className="text-[10px] uppercase tracking-widest text-on-surface-variant/60">
                   <th className="px-6 py-4 font-bold">Shipment ID</th>
@@ -186,6 +197,7 @@ const SimulatorPage = ({ shipments, simulationActive, triggerSimulation, resetSi
               </tbody>
             </table>
           </div>
+         </div>
 
           <div className="grid grid-cols-2 gap-6">
              <div className="bg-glass p-6 rounded-xl flex items-center justify-between shadow-sm">

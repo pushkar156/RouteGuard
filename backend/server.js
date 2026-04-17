@@ -16,6 +16,7 @@ dotenv.config();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const STATE_FILE = path.join(__dirname, 'data', 'state.json');
+const CACHE_FILE = path.join(__dirname, 'data', 'cache.json');
 
 const app = express();
 
@@ -63,6 +64,7 @@ let shipments = [...initialShipments];
 let alerts = [...initialAlerts];
 let events = [...initialRiskEvents];
 let pendingRawSignals = [];
+let extractionCache = {};
 
 // Persistence Helpers
 const saveState = () => {
@@ -72,6 +74,9 @@ const saveState = () => {
     const dir = path.dirname(STATE_FILE);
     if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
     fs.writeFileSync(STATE_FILE, data);
+    
+    // Save extraction cache too
+    fs.writeFileSync(CACHE_FILE, JSON.stringify(extractionCache, null, 2));
   } catch (err) {
     console.error('Failed to save state:', err);
   }
@@ -84,6 +89,11 @@ const loadState = () => {
       events = data.events || [...initialRiskEvents];
       alerts = data.alerts || [...initialAlerts];
       console.log(`✅ Loaded ${events.length} events and ${alerts.length} alerts from state.json`);
+    }
+
+    if (fs.existsSync(CACHE_FILE)) {
+      extractionCache = JSON.parse(fs.readFileSync(CACHE_FILE, 'utf8'));
+      console.log(`🧠 Loaded ${Object.keys(extractionCache).length} cached extractions.`);
     }
   } catch (err) {
     console.warn('Could not load state, using defaults:', err);
@@ -193,12 +203,26 @@ app.post('/api/process-signals', async (req, res) => {
   // For MVP, we process them sequentially to avoid rate limits
   for (const article of pendingRawSignals) {
     try {
-        const riskData = await extractRiskFromArticle(article);
+        let riskData;
+        
+        // 🆕 CHECK CACHE FIRST
+        if (extractionCache[article.title]) {
+            console.log(`💎 Using cached extraction for: ${article.title}`);
+            riskData = extractionCache[article.title];
+        } else {
+            riskData = await extractRiskFromArticle(article);
+            if (riskData.relevant !== false) {
+                extractionCache[article.title] = riskData; // Save to memory cache
+            }
+        }
         
         // If Gemini determined it's actually relevant and successfully extracted data
         if (riskData.relevant !== false && riskData.lat !== undefined) {
-             const newEvent = {
-                 id: `E-AI-${Date.now()}-${Math.floor(Math.random()*1000)}`,
+             // 🆕 Check if an event with this title already exists to avoid duplicates
+             const alreadyExists = events.some(e => e.title === article.title);
+             if (!alreadyExists) {
+                 const newEvent = {
+                     id: `E-AI-${Date.now()}-${Math.floor(Math.random()*1000)}`,
                  lat: riskData.lat,
                  lng: riskData.lng,
                  type: riskData.risk_type || 'unknown',
@@ -207,8 +231,9 @@ app.post('/api/process-signals', async (req, res) => {
                  desc: riskData.summary,
                  source: article.source?.name,
              };
-             newEvents.push(newEvent);
-             events.push(newEvent); // Add to our simulated database
+                 newEvents.push(newEvent);
+                 events.push(newEvent); // Add to our simulated database
+             }
         }
         processedCount++;
     } catch (error) {

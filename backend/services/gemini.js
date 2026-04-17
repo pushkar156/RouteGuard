@@ -17,6 +17,24 @@ const MOCK_EXTRACTION = {
   source_confidence: "medium"
 };
 
+// Helper for exponential backoff retries (Handles 429 Rate Limits)
+const withRetry = async (fn, maxRetries = 3, initialDelay = 2000) => {
+  let delay = initialDelay;
+  for (let i = 0; i < maxRetries; i++) {
+    try {
+      return await fn();
+    } catch (err) {
+      if (err.status === 429 && i < maxRetries - 1) {
+        console.warn(`🔄 Gemini Rate Limit (429). Retrying in ${delay}ms... (Attempt ${i + 1}/${maxRetries})`);
+        await new Promise(r => setTimeout(r, delay));
+        delay *= 2; // Exponential backoff
+        continue;
+      }
+      throw err;
+    }
+  }
+};
+
 // Zod schema for validating the AI response
 export const riskEventSchema = z.object({
   relevant: z.boolean(),
@@ -54,7 +72,7 @@ export const extractRiskFromArticle = async (article) => {
   `;
 
   try {
-    const response = await ai.models.generateContent({
+    const response = await withRetry(() => ai.models.generateContent({
         model: 'gemini-2.5-flash',
         contents: prompt,
         config: {
@@ -75,7 +93,7 @@ export const extractRiskFromArticle = async (article) => {
                 required: ["relevant"]
             }
         }
-    });
+    }));
 
     const parsedResponse = JSON.parse(response.text);
     
@@ -118,7 +136,7 @@ export const generateReroutingSuggestions = async (shipment, event) => {
   `;
 
   try {
-    const response = await ai.models.generateContent({
+    const response = await withRetry(() => ai.models.generateContent({
         model: 'gemini-2.5-flash',
         contents: prompt,
         config: {
@@ -142,7 +160,7 @@ export const generateReroutingSuggestions = async (shipment, event) => {
                 }
             }
         }
-    });
+    }));
 
     return JSON.parse(response.text);
   } catch (error) {

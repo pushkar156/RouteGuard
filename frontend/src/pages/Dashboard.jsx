@@ -212,7 +212,7 @@ const Dashboard = ({ shipments, alerts, selectedShipment, setSelectedShipment, s
                   {currentShipment.events && currentShipment.events.length > 0 ? currentShipment.events.map((event, idx) => (
                      <div key={idx} className="bg-surface-container-lowest p-4 rounded-lg">
                        <div className="flex justify-between items-start mb-2">
-                         <span className="text-sm font-bold text-on-surface">{event.name}</span>
+                         <span className="text-sm font-bold text-on-surface">{event.title}</span>
                          <span className={`text-[10px] font-bold px-2 py-0.5 rounded
                             ${event.severity === 'CRITICAL' ? 'text-error bg-error/10 border border-error/20' : 'text-tertiary bg-tertiary/10 border border-tertiary/20'} `}>
                            {event.severity}
