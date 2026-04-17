@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { MapContainer, TileLayer, Marker, Polyline, useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Polyline, useMap, Popup } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
@@ -59,7 +59,20 @@ const MultiMapComponent = ({ shipments, riskEvents, selectedShipment, onSelectSh
           key={event.id} 
           position={[event.lat, event.lng]} 
           icon={createRiskIcon(event.severity)}
-        />
+        >
+          <Popup className="custom-popup">
+            <div className="p-1">
+              <div className="flex items-center gap-2 mb-1">
+                <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${event.severity === 'high' || event.severity === 'CRITICAL' ? 'bg-error-container text-on-error-container' : 'bg-warning-container text-on-warning-container'}`}>
+                  {event.severity} Risk
+                </span>
+                <span className="text-on-surface-variant text-[10px]">{new Date(event.timestamp).toLocaleDateString()}</span>
+              </div>
+              <h3 className="font-bold text-sm text-on-surface leading-tight mb-1">{event.title}</h3>
+              <p className="text-xs text-on-surface-variant line-clamp-2">{event.summary || 'Disruption affecting maritime routes in this polygon.'}</p>
+            </div>
+          </Popup>
+        </Marker>
       ))}
 
       {/* Shipment Routes */}
@@ -71,18 +84,42 @@ const MultiMapComponent = ({ shipments, riskEvents, selectedShipment, onSelectSh
         const dashArray = shipment.riskScore >= 70 ? '8, 8' : (shipment.riskScore >= 40 ? '5, 5' : '');
 
         return (
-          <Polyline 
-            key={shipment.id}
-            positions={shipment.coords} 
-            color={color}
-            weight={weight}
-            opacity={opacity}
-            dashArray={dashArray}
-            eventHandlers={{
-              click: () => onSelectShipment && onSelectShipment(shipment.id)
-            }}
-            pathOptions={{ cursor: 'pointer' }}
-          />
+          <React.Fragment key={shipment.id}>
+            <Polyline 
+              positions={shipment.coords} 
+              color={color}
+              weight={weight}
+              opacity={opacity}
+              dashArray={dashArray}
+              eventHandlers={{
+                click: () => onSelectShipment && onSelectShipment(shipment.id)
+              }}
+              pathOptions={{ cursor: 'pointer' }}
+            >
+              <Popup>
+                <div className="p-1">
+                  <div className="text-[10px] font-bold text-on-surface-variant uppercase tracking-tighter mb-0.5">{shipment.id}</div>
+                  <h3 className="font-bold text-sm text-on-surface mb-1">{shipment.name}</h3>
+                  <div className="flex items-center gap-2">
+                    <div className="flex-1 h-1.5 bg-surface-container-high rounded-full overflow-hidden">
+                      <div className="h-full rounded-full transition-all duration-1000" style={{ width: `${shipment.riskScore}%`, backgroundColor: color }}></div>
+                    </div>
+                    <span className="text-xs font-bold" style={{ color }}>{Math.round(shipment.riskScore)}% Risk</span>
+                  </div>
+                </div>
+              </Popup>
+            </Polyline>
+            
+            {/* Visual indicator for current location (first coord for demo) */}
+            <Marker 
+              position={shipment.coords[0]} 
+              icon={L.divIcon({
+                className: 'ship-pos',
+                html: `<div style="width: 12px; height: 12px; background-color: ${color}; border: 2px solid white; border-radius: 50%; box-shadow: 0 0 5px rgba(0,0,0,0.3);"></div>`,
+                iconSize: [12, 12]
+              })}
+            />
+          </React.Fragment>
         );
       })}
 

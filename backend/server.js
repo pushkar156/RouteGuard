@@ -59,6 +59,26 @@ app.patch('/api/alerts/:id/resolve', (req, res) => {
   res.json({ success: true, alertId: req.params.id });
 });
 
+// ✅ Demo Super-Button: One click to rule them all
+app.post('/api/run-pipeline', async (req, res) => {
+  try {
+    console.log("🚀 Manual Pipeline Triggered...");
+    // 1. Ingest
+    const ingestRes = await fetch(`http://localhost:${PORT}/api/ingest`, { method: 'POST' });
+    // 2. Process
+    const processRes = await fetch(`http://localhost:${PORT}/api/process-signals`, { method: 'POST' });
+    const data = await processRes.json();
+    
+    res.json({ 
+      success: true, 
+      message: "End-to-end pipeline finished.",
+      stats: data.metadata 
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 app.post('/api/ingest', async (req, res) => {
   // ... (ingestion logic remains intact) ...
   try {

@@ -25,6 +25,7 @@ function App() {
   const [activeScreen, setActiveScreen] = useState('Dashboard');
   const [selectedShipment, setSelectedShipment] = useState(null);
   const [simulationActive, setSimulationActive] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   // Data state
   const [shipments, setShipments] = useState([]);
@@ -111,6 +112,18 @@ function App() {
     setShipments(liveShipments); // Restore the last real live scores
   };
 
+  const runGlobalPipeline = async () => {
+    setIsProcessing(true);
+    try {
+      await fetch('http://localhost:3001/api/run-pipeline', { method: 'POST' });
+      await fetchData(); // Refresh UI with new AI data
+    } catch (err) {
+      console.error("Pipeline failed:", err);
+    } finally {
+      setIsProcessing(false);
+    }
+  };
+
   const renderActiveScreen = () => {
     switch(activeScreen) {
       case 'Dashboard':
@@ -122,6 +135,8 @@ function App() {
             setSelectedShipment={setSelectedShipment}
             setActiveScreen={setActiveScreen}
             simulationActive={simulationActive}
+            isProcessing={isProcessing}
+            runGlobalPipeline={runGlobalPipeline}
           />
         );
       case 'Map':

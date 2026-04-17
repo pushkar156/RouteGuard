@@ -1,8 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import MapComponent from '../components/MapComponent';
 import { getRiskInfo } from '../data/shipments';
 
-const Dashboard = ({ shipments, alerts, selectedShipment, setSelectedShipment, setActiveScreen, simulationActive }) => {
+const Dashboard = ({ shipments, alerts, selectedShipment, setSelectedShipment, setActiveScreen, simulationActive, isProcessing, runGlobalPipeline }) => {
+  const [searchTerm, setSearchTerm] = useState('');
+  
+  const filteredShipments = shipments.filter(s => 
+    s.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    s.origin.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    s.destination.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   const unresolvedAlertsCount = alerts.filter(a => !a.resolved).length;
   const highRiskCount = shipments.filter(s => s.riskScore >= 70).length;
 
@@ -24,11 +32,23 @@ const Dashboard = ({ shipments, alerts, selectedShipment, setSelectedShipment, s
             <p className="text-sm text-secondary">{shipments.length} active shipments · {highRiskCount} high risk · {unresolvedAlertsCount} alerts</p>
           </div>
           <div className="flex items-center gap-6">
+            <button 
+              onClick={runGlobalPipeline}
+              disabled={isProcessing}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg font-bold text-xs tracking-wide transition-all ${isProcessing ? 'bg-secondary/20 text-secondary cursor-not-allowed' : 'bg-primary text-on-primary hover:bg-primary/90 shadow-lg shadow-primary/20'}`}
+            >
+              <span className={`material-symbols-outlined text-sm ${isProcessing ? 'animate-spin' : ''}`}>
+                {isProcessing ? 'sync' : 'target'}
+              </span>
+              {isProcessing ? 'ANALYZING GLOBAL NEWS...' : 'SCAN FOR CRITICAL RISKS'}
+            </button>
             <div className="relative group">
               <input 
                 className="bg-surface-container-lowest border-none ring-1 ring-outline-variant/30 focus:ring-2 focus:ring-primary text-sm rounded-lg px-4 py-2 w-64 transition-all" 
                 placeholder="Search shipments..." 
                 type="text"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
               />
               <span className="material-symbols-outlined absolute right-3 top-2 text-secondary text-xl">search</span>
             </div>
@@ -60,7 +80,7 @@ const Dashboard = ({ shipments, alerts, selectedShipment, setSelectedShipment, s
                 </tr>
               </thead>
               <tbody className="divide-y divide-outline-variant/10">
-                {shipments.map((shipment) => {
+                {filteredShipments.length > 0 ? filteredShipments.map((shipment) => {
                   const riskInfo = getRiskInfo(shipment.riskScore);
                   const isSelected = selectedShipment === shipment.id;
                   
@@ -93,7 +113,13 @@ const Dashboard = ({ shipments, alerts, selectedShipment, setSelectedShipment, s
                       </td>
                     </tr>
                   )
-                })}
+                }) : (
+                  <tr>
+                    <td colSpan="6" className="px-6 py-12 text-center text-on-surface-variant italic">
+                      No shipments found matching "{searchTerm}"
+                    </td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>
