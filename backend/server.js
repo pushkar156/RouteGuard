@@ -51,6 +51,14 @@ app.get('/api/signals/pending', (req, res) => {
   res.json({ count: pendingRawSignals.length, signals: pendingRawSignals });
 });
 
+// ✅ Bug #5 Fixed: Persist alert resolution to backend
+app.patch('/api/alerts/:id/resolve', (req, res) => {
+  const alert = alerts.find(a => a.id === req.params.id);
+  if (!alert) return res.status(404).json({ error: 'Alert not found.' });
+  alert.resolved = true;
+  res.json({ success: true, alertId: req.params.id });
+});
+
 app.post('/api/ingest', async (req, res) => {
   // ... (ingestion logic remains intact) ...
   try {

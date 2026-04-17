@@ -18,9 +18,12 @@ export const evaluateShipmentAlerts = async (shipments, existingAlerts) => {
       // Grab the most severe event affecting this shipment
       const primaryEvent = shipment.events.sort((a, b) => b.percent - a.percent)[0];
       
-      // Prevent duplicate alerts for the exact same event + shipment combo
-      const alertExists = updatedAlertsList.some(a => 
-        a.shipmentId === shipment.id && a.eventId === primaryEvent.id && !a.resolved
+      // ✅ Bug #3 Fixed: Dedup using (shipmentId + event title) as a compound key.
+      // Using eventId was broken for AI events because each run generates a new unique timestamp ID.
+      const alertExists = updatedAlertsList.some(a =>
+        a.shipmentId === shipment.id &&
+        a.title === `Action Required: ${primaryEvent.title || 'Risk Detected'}` &&
+        !a.resolved
       );
 
       if (!alertExists) {

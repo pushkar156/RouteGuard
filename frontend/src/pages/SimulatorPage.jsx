@@ -3,9 +3,13 @@ import React, { useState } from 'react';
 const SimulatorPage = ({ shipments, simulationActive, triggerSimulation, resetSimulation }) => {
   const [targetLocation, setTargetLocation] = useState('Rotterdam');
   const [severity, setSeverity] = useState(40);
+  const [disruptionType, setDisruptionType] = useState('Labor Strike');
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleTrigger = () => {
-    triggerSimulation(targetLocation, parseInt(severity, 10));
+  const handleTrigger = async () => {
+    setIsLoading(true);
+    await triggerSimulation(targetLocation, parseInt(severity, 10), disruptionType);
+    setIsLoading(false);
   };
 
   const getDeltaBadge = (base, current) => {
@@ -60,15 +64,21 @@ const SimulatorPage = ({ shipments, simulationActive, triggerSimulation, resetSi
                   <option value="Shanghai">Shanghai</option>
                   <option value="Singapore">Singapore</option>
                   <option value="Los Angeles">Los Angeles</option>
+                  <option value="Suez Canal">Suez Canal</option>
                 </select>
               </div>
               
               <div className="space-y-2">
                 <label className="text-[11px] font-bold text-on-surface-variant uppercase tracking-wider">Disruption Type</label>
-                <select className="w-full bg-surface-container-lowest border-none rounded-lg text-on-surface text-sm p-4 appearance-none focus:ring-2 focus:ring-primary outline-none">
+                <select
+                  className="w-full bg-surface-container-lowest border-none rounded-lg text-on-surface text-sm p-4 appearance-none focus:ring-2 focus:ring-primary outline-none"
+                  value={disruptionType}
+                  onChange={(e) => setDisruptionType(e.target.value)}
+                >
                   <option>Labor Strike</option>
                   <option>Extreme Weather</option>
                   <option>Cybersecurity Breach</option>
+                  <option>Piracy</option>
                 </select>
               </div>
 
@@ -89,9 +99,12 @@ const SimulatorPage = ({ shipments, simulationActive, triggerSimulation, resetSi
               <div className="pt-6 space-y-4">
                 <button 
                   onClick={handleTrigger}
-                  className="w-full py-4 rounded-lg bg-gradient-to-br from-primary to-primary-container text-on-primary font-bold text-sm tracking-tight shadow-lg shadow-primary/10 hover:opacity-90 active:scale-[0.98] transition-all"
+                  disabled={isLoading}
+                  className="w-full py-4 rounded-lg bg-gradient-to-br from-primary to-primary-container text-on-primary font-bold text-sm tracking-tight shadow-lg shadow-primary/10 hover:opacity-90 active:scale-[0.98] transition-all disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
-                  Trigger Disruption
+                  {isLoading ? (
+                    <><span className="h-4 w-4 animate-spin rounded-full border-2 border-on-primary border-t-transparent"></span> Running Simulation...</>
+                  ) : 'Trigger Disruption'}
                 </button>
                 <button 
                   onClick={resetSimulation}
