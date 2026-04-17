@@ -1,65 +1,37 @@
-# ========================
-# 🔐 Environment & Secrets
-# ========================
+# 🔐 Environment & Secrets (CRITICAL)
 .env
 .env.*
+backend/.env
+frontend/.env
 !.env.example
 
-# ========================
 # 📦 Dependencies
-# ========================
 node_modules/
 **/node_modules/
+package-lock.json
 
-# ========================
 # 🏗️ Build Outputs
-# ========================
 dist/
 dist-ssr/
 build/
-*.local
+.vite/
 
-# ========================
+# 💾 Backend Data/State (Keep repo clean)
+backend/state.json
+backend/data/processed/
+
 # 📊 Logs
-# ========================
-logs/
 *.log
 npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
 
-# ========================
-# 💾 Backend State Files
-# ========================
-backend/state.json
-
-# ========================
-# 🖥️ Editor Directories & Files
-# ========================
-.vscode/*
-!.vscode/extensions.json
+# 🖥️ IDE & OS Files
+.vscode/
 .idea/
 .DS_Store
-
-# ========================
-# 🪟 Windows OS Files
-# ========================
 Thumbs.db
-ehthumbs.db
 Desktop.ini
-$RECYCLE.BIN/
 
-# ========================
-# ⚙️ Misc Build Artifacts
-# ========================
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-*.pem
+# (REMOVED: docs/ - judges need to see your documentation!)
 
 
 docs/
