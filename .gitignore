@@ -1,10 +1,28 @@
-# RouteGuard Documentation
-docs/
-docs/IMPLEMENTATION_STRATEGY.md
-docs/RouteGuard_ProjectPlan.docx
+# ========================
+# 🔐 Environment & Secrets
+# ========================
+.env
+.env.*
+!.env.example
 
-# Logs
-logs
+# ========================
+# 📦 Dependencies
+# ========================
+node_modules/
+**/node_modules/
+
+# ========================
+# 🏗️ Build Outputs
+# ========================
+dist/
+dist-ssr/
+build/
+*.local
+
+# ========================
+# 📊 Logs
+# ========================
+logs/
 *.log
 npm-debug.log*
 yarn-debug.log*
@@ -12,18 +30,33 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-dist
-dist-ssr
-*.local
+# ========================
+# 💾 Backend State Files
+# ========================
+backend/state.json
 
-# Editor directories and files
+# ========================
+# 🖥️ Editor Directories & Files
+# ========================
 .vscode/*
 !.vscode/extensions.json
-.idea
+.idea/
 .DS_Store
+
+# ========================
+# 🪟 Windows OS Files
+# ========================
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# ========================
+# ⚙️ Misc Build Artifacts
+# ========================
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
+*.pem
