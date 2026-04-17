@@ -120,7 +120,8 @@ function App() {
     setSimulationActive(false);
     setShipments(liveShipments); // Restore the last real live scores
   };
-
+  const runGlobalPipeline = async () => {
+    setIsProcessing(true);
     try {
       const response = await fetch(`${API_BASE}/run-pipeline`, { method: 'POST' });
       const data = await response.json();
