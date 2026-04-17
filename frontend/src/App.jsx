@@ -22,6 +22,8 @@ const TYPE_MAP = {
 };
 
 function App() {
+  const API_BASE = window.location.hostname === 'localhost' ? 'http://localhost:3001/api' : '/api';
+  
   const [activeScreen, setActiveScreen] = useState('Dashboard');
   const [selectedShipment, setSelectedShipment] = useState(null);
   const [simulationActive, setSimulationActive] = useState(false);
@@ -38,9 +40,9 @@ function App() {
   const fetchData = async () => {
     try {
       const [shipmentsRes, alertsRes, eventsRes] = await Promise.all([
-        fetch('http://localhost:3001/api/shipments'),
-        fetch('http://localhost:3001/api/alerts'),
-        fetch('http://localhost:3001/api/events'),
+        fetch(`${API_BASE}/shipments`),
+        fetch(`${API_BASE}/alerts`),
+        fetch(`${API_BASE}/events`),
       ]);
 
       const shipmentsData = await shipmentsRes.json();
@@ -77,7 +79,7 @@ function App() {
     setAlerts(prev => prev.map(a => a.id === alertId ? { ...a, resolved: true } : a));
     // Persist to backend (best-effort)
     try {
-      await fetch(`http://localhost:3001/api/alerts/${alertId}/resolve`, { method: 'PATCH' });
+      await fetch(`${API_BASE}/alerts/${alertId}/resolve`, { method: 'PATCH' });
     } catch (e) {
       console.warn('Could not persist alert resolution to backend:', e);
     }
@@ -101,7 +103,7 @@ function App() {
     };
 
     try {
-      const res = await fetch('http://localhost:3001/api/simulate', {
+      const res = await fetch(`${API_BASE}/simulate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ event: simulatedEvent }),
@@ -120,7 +122,7 @@ function App() {
   };
 
     try {
-      const response = await fetch('http://localhost:3001/api/run-pipeline', { method: 'POST' });
+      const response = await fetch(`${API_BASE}/run-pipeline`, { method: 'POST' });
       const data = await response.json();
       if (data.success) {
         setScanSummary(data.processed ? data : { processed: 10, extracted_events: 2 });
