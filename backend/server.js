@@ -5,6 +5,8 @@ import { initialShipments, initialAlerts, initialRiskEvents } from './data/mockD
 import { fetchGNewsArticles } from './connectors/gnews.js';
 import { isRelevant } from './utils/filter.js';
 import { extractRiskFromArticle } from './services/gemini.js';
+import { updateAllShipmentScores } from './services/scoring.js';
+import { evaluateShipmentAlerts } from './services/alerts.js';
 
 dotenv.config();
 
@@ -119,11 +121,51 @@ app.post('/api/process-signals', async (req, res) => {
   // Clear the queue
   pendingRawSignals = [];
   
+  // Phase 3: Spatial Intelligence triggering!
+  // Run the geo-matching and scoring algorithm on all active shipments
+  console.log('🌍 Activating Spatial Brain: Re-scoring all shipments against live events...');
+  shipments = updateAllShipmentScores(shipments, events);
+  console.log('✅ Shipment risk scores updated successfully.');
+
+  // Phase 4: Action Layer triggering!
+  // Check if the rescored shipments breached the threshold to generate an alert
+  console.log('🔔 Evaluating shipments for threshold breaches...');
+  const alertEvaluation = await evaluateShipmentAlerts(shipments, alerts);
+  if (alertEvaluation.newAlerts.length > 0) {
+    alerts = alertEvaluation.updatedAlertsList;
+    console.log(`📡 Broadcasted ${alertEvaluation.newAlerts.length} new actionable alerts.`);
+  }
+
   res.json({
-    message: 'Finished AI processing.',
+    message: 'Finished AI processing and Geo-Matching.',
     processed: processedCount,
     extracted_events: newEvents.length,
-    newEvents
+    newEvents,
+    shipments_updated: true,
+    alerts_generated: alertEvaluation.newAlerts.length
+  });
+});
+
+// Phase 4: What-If Simulator Hook
+// Accepts a manual mock event, computes its risk on the fly without saving to DB permanently
+app.post('/api/simulate', async (req, res) => {
+  const manualEvent = req.body.event;
+  if (!manualEvent) return res.status(400).json({ error: 'Missing event payload.' });
+
+  console.log(`🕹️ Running What-If Simulation for: ${manualEvent.type} at ${manualEvent.lat}, ${manualEvent.lng}`);
+  
+  // Clone current shipments to avoid mutating live data
+  let simShipments = JSON.parse(JSON.stringify(shipments));
+  
+  // Run the geo score against ONLY this simulated event
+  simShipments = updateAllShipmentScores(simShipments, [manualEvent]);
+  
+  // We don't save the simEvent or simAlerts to the real system, just return what WOULD happen
+  const simAlertsData = await evaluateShipmentAlerts(simShipments, alerts);
+
+  res.json({
+    simulatedShipments: simShipments,
+    simulatedNewAlerts: simAlertsData.newAlerts
   });
 });
 

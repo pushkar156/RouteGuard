@@ -88,3 +88,59 @@ export const extractRiskFromArticle = async (article) => {
     throw error;
   }
 };
+
+/**
+ * Phase 4: Generates actionable rerouting suggestions based on a known disruption.
+ */
+export const generateReroutingSuggestions = async (shipment, event) => {
+  if (!GEMINI_API_KEY || GEMINI_API_KEY === 'your_gemini_key_here') {
+    return [
+      {
+        route_name: "Mocked Inland Diversion",
+        estimated_delay_hours: 24,
+        estimated_cost_increase_percent: 15,
+        risk_reduction: 45,
+        reasoning: "Diverts around the affected area using secondary rail networks. (Simulated AI response)"
+      }
+    ];
+  }
+
+  const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
+  
+  const prompt = `
+    You are a maritime logistics advisor. A shipment named '${shipment.name}' traveling from '${shipment.origin}' to '${shipment.destination}' is blocked.
+    
+    The disruption is: ${event.type} (${event.severity}) at ${event.lat}, ${event.lng}.
+    Context: ${event.title || ''} - ${event.desc || ''}
+    
+    Suggest 1-2 realistic alternative routing options or immediate actions. Respond ONLY in valid JSON array format.
+  `;
+
+  try {
+    const response = await ai.models.generateContent({
+        model: 'gemini-2.5-flash',
+        contents: prompt,
+        config: {
+            responseMimeType: 'application/json',
+            responseSchema: {
+                type: Type.ARRAY,
+                items: {
+                    type: Type.OBJECT,
+                    properties: {
+                        route_name: { type: Type.STRING },
+                        estimated_delay_hours: { type: Type.INTEGER },
+                        estimated_cost_increase_percent: { type: Type.INTEGER },
+                        risk_reduction: { type: Type.INTEGER },
+                        reasoning: { type: Type.STRING }
+                    }
+                }
+            }
+        }
+    });
+
+    return JSON.parse(response.text);
+  } catch (error) {
+    console.error(`Gemini Rerouting Error for shipment '${shipment.id}':`, error);
+    return []; // Fail gracefully 
+  }
+};
